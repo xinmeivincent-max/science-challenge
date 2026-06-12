@@ -1,0 +1,3781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>杭州小升初科学闯关 - 15天真题挑战</title>
+    <style>
+        /* ===== 全局变量与重置 ===== */
+        :root {
+            --primary: #2196F3;
+            --primary-dark: #1976D2;
+            --primary-light: #BBDEFB;
+            --secondary: #4CAF50;
+            --secondary-light: #C8E6C9;
+            --accent: #FF9800;
+            --accent-light: #FFE0B2;
+            --danger: #F44336;
+            --danger-light: #FFCDD2;
+            --bg: #f0f7ff;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* ===== 页面容器 ===== */
+        .page { display: none; min-height: 100vh; }
+        .page.active { display: block; }
+        
+        /* ===== 顶部导航栏 ===== */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .header-back {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: background 0.2s;
+        }
+        
+        .header-back:hover { background: rgba(255,255,255,0.3); }
+        .header-back.hidden { display: none; }
+        
+        /* ===== 首页 - 闯关地图 ===== */
+        .map-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+        
+        .progress-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .progress-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .progress-text {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--primary-light);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 6px;
+            transition: width 0.6s ease;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+        
+        /* 关卡地图 */
+        .map-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .map-title-icon { font-size: 22px; }
+        
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        @media (min-width: 600px) {
+            .levels-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+        
+        .level-node {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+        
+        .level-node:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .level-node.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #f5f5f5;
+        }
+        
+        .level-node.locked:hover {
+            transform: none;
+            box-shadow: var(--shadow);
+        }
+        
+        .level-node.current {
+            border-color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+        
+        .level-node.completed {
+            border-color: var(--secondary);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,152,0,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(255,152,0,0); }
+        }
+        
+        .level-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 8px;
+            position: relative;
+        }
+        
+        .level-icon.locked { background: #ddd; }
+        .level-icon.current { background: var(--accent-light); }
+        .level-icon.completed { background: var(--secondary-light); }
+        .level-icon.unlockable { background: var(--primary-light); }
+        
+        .level-lock {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 20px;
+            height: 20px;
+            background: var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .level-stars {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            margin-top: 4px;
+        }
+        
+        .star {
+            font-size: 14px;
+            color: #ddd;
+        }
+        .star.filled { color: var(--accent); }
+        
+        .level-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+        
+        .level-status {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+        
+        /* ===== 知识点提示页 ===== */
+        .knowledge-intro {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 16px;
+            text-align: center;
+        }
+        
+        .intro-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            box-shadow: var(--shadow);
+        }
+        
+        .intro-level-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .intro-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .intro-topics {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .intro-topics-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .intro-topics-list {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 2;
+        }
+        
+        .intro-stats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 20px 0;
+        }
+        
+        .intro-stat {
+            text-align: center;
+        }
+        
+        .intro-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .intro-stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 14px 48px;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(33,150,243,0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33,150,243,0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px 32px;
+            border-radius: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s;
+        }
+        
+        .btn-secondary:hover { background: #e8e8e8; }
+        
+        /* ===== 做题界面 ===== */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        
+        .quiz-header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quiz-progress-info {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .quiz-progress-info span {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .quiz-timer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-light);
+            background: var(--bg);
+            padding: 6px 14px;
+            border-radius: 16px;
+        }
+        
+        .quiz-timer.warning { color: var(--danger); background: var(--danger-light); }
+        
+        .quiz-timer-icon { font-size: 16px; }
+        
+        .question-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .question-type {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .question-text {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        
+        .question-image {
+            background: var(--bg);
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+        }
+        
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .option.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .option.correct {
+            border-color: var(--secondary);
+            background: var(--secondary-light);
+        }
+        
+        .option.wrong {
+            border-color: var(--danger);
+            background: var(--danger-light);
+        }
+        
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .option-marker {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        
+        .option.selected .option-marker {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .option.correct .option-marker {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+        
+        .option.wrong .option-marker {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+        
+        /* 解析区域 */
+        .analysis-section {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .analysis-section.show { display: block; }
+        
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .analysis-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .analysis-icon.correct { background: var(--secondary-light); }
+        .analysis-icon.wrong { background: var(--danger-light); }
+        
+        .analysis-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .analysis-title.correct { color: var(--secondary); }
+        .analysis-title.wrong { color: var(--danger); }
+        
+        .analysis-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        
+        .analysis-source {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border);
+        }
+        
+        .analysis-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .btn-favorite {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: background 0.2s;
+        }
+        
+        .btn-favorite:hover { background: var(--accent-light); }
+        .btn-favorite.active { background: var(--accent); color: white; }
+        
+        /* 底部操作栏 */
+        .quiz-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .quiz-actions .btn-primary { flex: 1; padding: 14px; }
+        
+        .btn-pause {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* ===== 暂停弹窗 ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+        
+        .modal-overlay.show { display: flex; }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .modal-actions .btn-primary { width: 100%; }
+        .modal-actions .btn-secondary { width: 100%; margin-top: 0; }
+        
+        /* ===== 结果页 ===== */
+        .result-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+        
+        .result-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .result-badge {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 16px;
+        }
+        
+        .result-badge.star-3 { background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+        .result-badge.star-2 { background: linear-gradient(135deg, #C0C0C0 0%, #A0A0A0 100%); }
+        .result-badge.star-1 { background: linear-gradient(135deg, #CD7F32 0%, #B87333 100%); }
+        
+        .result-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .result-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .result-stat {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+        }
+        
+        .result-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .result-stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        .result-stars {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        
+        .result-star {
+            font-size: 36px;
+            color: #ddd;
+            transition: color 0.3s, transform 0.3s;
+        }
+        
+        .result-star.filled {
+            color: #FFD700;
+            text-shadow: 0 2px 4px rgba(255,215,0,0.3);
+        }
+        
+        .result-star.animate {
+            animation: starPop 0.5s ease;
+        }
+        
+        @keyframes starPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 错题回顾 */
+        .wrong-list {
+            margin-top: 24px;
+            text-align: left;
+        }
+        
+        .wrong-list-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .wrong-item {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .wrong-item:hover { background: #e0e8f0; }
+        
+        .wrong-item-text {
+            font-size: 14px;
+            color: var(--text);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .wrong-item-tag {
+            font-size: 12px;
+            color: var(--danger);
+            background: var(--danger-light);
+            padding: 2px 8px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .result-actions .btn-primary { flex: 1; }
+        .result-actions .btn-secondary { flex: 1; margin-top: 0; }
+        
+        /* ===== 错题本页面 ===== */
+        .wrongbook-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+        
+        .wrongbook-header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+        
+        .wrongbook-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        
+        .wrongbook-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn:hover { border-color: var(--primary); }
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .wrongbook-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .wrongbook-item {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .wrongbook-item:hover { transform: translateX(4px); }
+        
+        .wrongbook-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .wrongbook-item-tag {
+            font-size: 12px;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+        
+        .wrongbook-item-count {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .wrongbook-item-text {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .wrongbook-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+        
+        .wrongbook-empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        
+        /* ===== 底部导航 ===== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 4px 16px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.2s;
+            border: none;
+            background: none;
+            font-size: 12px;
+        }
+        
+        .nav-item:hover { color: var(--primary); }
+        .nav-item.active { color: var(--primary); }
+        
+        .nav-icon {
+            font-size: 22px;
+        }
+        
+        .nav-label {
+            font-size: 11px;
+        }
+        
+        /* 页面底部留白，避免被底部导航遮挡 */
+        .page { padding-bottom: 70px; }
+        
+        /* ===== 动画效果 ===== */
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* ===== 响应式优化 ===== */
+        @media (max-width: 400px) {
+            .levels-grid { grid-template-columns: repeat(2, 1fr); }
+            .result-stats { grid-template-columns: 1fr; }
+            .quiz-actions { flex-direction: column; }
+            .result-actions { flex-direction: column; }
+        }
+        
+        /* ===== 滚动条美化 ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <div class="header-icon">🧪</div>
+                <span id="headerText">科学闯关</span>
+            </div>
+            <button class="header-back hidden" id="backBtn" onclick="goBack()">
+                ← 返回
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== 页面1：首页/闯关地图 ===== -->
+    <div class="page active" id="pageMap">
+        <div class="map-container">
+            <!-- 进度总览 -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-title">📊 总进度</span>
+                    <span class="progress-text" id="progressText">已完成 0/15 关</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-number" id="statCompleted">0</div>
+                        <div class="stat-label">已通关</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statStars">0</div>
+                        <div class="stat-label">总星级</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="statWrong">0</div>
+                        <div class="stat-label">错题数</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 关卡地图 -->
+            <div class="map-title">
+                <span class="map-title-icon">🗺️</span>
+                闯关地图
+            </div>
+            <div class="levels-grid" id="levelsGrid">
+                <!-- 关卡节点由JS生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 页面2：知识点提示 ===== -->
+    <div class="page" id="pageIntro">
+        <div class="knowledge-intro">
+            <div class="intro-card">
+                <div class="intro-level-badge" id="introLevel">第 1 关</div>
+                <div class="intro-title" id="introTitle">物理变化 vs 化学变化</div>
+                <div class="intro-topics">
+                    <div class="intro-topics-title">📚 本关知识点</div>
+                    <div class="intro-topics-list" id="introTopics">
+                        • 物理变化与化学变化的本质区别<br>
+                        • 常见物理变化与化学变化的判断<br>
+                        • "是否有新物质生成"是判断核心
+                    </div>
+                </div>
+                <div class="intro-stats">
+                    <div class="intro-stat">
+                        <div class="intro-stat-value" id="introQuestionCount">10</div>
+                        <div class="intro-stat-label">题目数量</div>
+                    </div>
+                    <div class="intro-stat">
+                        <div class="intro-stat-value" id="introTime">15</div>
+                        <div class="intro-stat-label">建议用时(分)</div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="startQuiz()">🚀 开始闯关</button>
+                <button class="btn-secondary" onclick="showPage('pageMap')">返回地图</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 页面3：做题界面 ===== -->
+    <div class="page" id="pageQuiz">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <div class="quiz-progress-info">
+                    第 <span id="currentQuestion">1</span> 题 / 共 <span id="totalQuestions">10</span> 题
+                </div>
+                <div class="quiz-timer" id="timer">
+                    <span class="quiz-timer-icon">⏱️</span>
+                    <span id="timerText">15:00</span>
+                </div>
+            </div>
+
+            <div class="question-card fade-in" id="questionCard">
+                <div style="display:flex;align-items:center;margin-bottom:12px;">
+                    <div class="question-number" id="questionNumber">1</div>
+                    <span class="question-type" id="questionType">单选题</span>
+                </div>
+                <div class="question-text" id="questionText">题目内容加载中...</div>
+                <div class="question-image" id="questionImage" style="display:none;">
+                    [图片占位符]
+                </div>
+                <div class="options-list" id="optionsList">
+                    <!-- 选项由JS生成 -->
+                </div>
+
+                <!-- 解析区域 -->
+                <div class="analysis-section" id="analysisSection">
+                    <div class="analysis-header">
+                        <div class="analysis-icon" id="analysisIcon">✓</div>
+                        <span class="analysis-title" id="analysisTitle">回答正确！</span>
+                    </div>
+                    <div class="analysis-content" id="analysisContent">解析内容...</div>
+                    <div class="analysis-source" id="analysisSource">真题来源：2023年滨江区第1题</div>
+                    <div class="analysis-actions">
+                        <button class="btn-favorite" id="favoriteBtn" onclick="toggleFavorite()">
+                            ⭐ 收藏错题
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-actions" id="quizActions">
+                <button class="btn-pause" onclick="pauseQuiz()">⏸️ 暂停</button>
+                <button class="btn-primary" id="submitBtn" onclick="submitAnswer()">提交答案</button>
+                <button class="btn-primary hidden" id="nextBtn" onclick="nextQuestion()">下一题 →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 页面4：结果页 ===== -->
+    <div class="page" id="pageResult">
+        <div class="result-container">
+            <div class="result-card">
+                <div class="result-badge star-3" id="resultBadge">⭐</div>
+                <div class="result-title" id="resultTitle">恭喜通关！</div>
+                <div class="result-subtitle" id="resultSubtitle">本关表现优秀，继续保持！</div>
+
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="resultScore">90</div>
+                        <div class="result-stat-label">得分</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="resultCorrect">9</div>
+                        <div class="result-stat-label">正确</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="resultTime">12:30</div>
+                        <div class="result-stat-label">用时</div>
+                    </div>
+                </div>
+
+                <div class="result-stars" id="resultStars">
+                    <span class="result-star filled">⭐</span>
+                    <span class="result-star filled">⭐</span>
+                    <span class="result-star filled">⭐</span>
+                </div>
+
+                <!-- 错题回顾 -->
+                <div class="wrong-list" id="wrongList" style="display:none;">
+                    <div class="wrong-list-title">📋 错题回顾</div>
+                    <div id="wrongListContent"></div>
+                </div>
+
+                <div class="result-actions">
+                    <button class="btn-primary" onclick="nextLevel()">下一关 →</button>
+                    <button class="btn-secondary" onclick="showPage('pageMap')">返回地图</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 页面5：错题本 ===== -->
+    <div class="page" id="pageWrongBook">
+        <div class="wrongbook-container">
+            <div class="wrongbook-header">
+                <div class="progress-title">📒 错题本</div>
+                <div class="wrongbook-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="wrongTotal">0</div>
+                        <div class="stat-label">总错题</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="wrongMastered">0</div>
+                        <div class="stat-label">已掌握</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="wrongPending">0</div>
+                        <div class="stat-label">待复习</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrongbook-filter" id="wrongFilter">
+                <button class="filter-btn active" onclick="filterWrong('all')">全部</button>
+                <button class="filter-btn" onclick="filterWrong('pending')">待复习</button>
+                <button class="filter-btn" onclick="filterWrong('mastered')">已掌握</button>
+            </div>
+
+            <div class="wrongbook-list" id="wrongList">
+                <!-- 错题列表由JS生成 -->
+            </div>
+
+            <div class="wrongbook-empty" id="wrongEmpty" style="display:none;">
+                <div class="wrongbook-empty-icon">🎉</div>
+                <div>太棒了！目前还没有错题</div>
+                <div style="font-size:13px;margin-top:8px;">继续保持，加油！</div>
+            </div>
+
+            <button class="btn-primary" style="width:100%;margin-top:16px;" onclick="challengeWrong()">
+                🎯 挑战错题
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== 暂停弹窗 ===== -->
+    <div class="modal-overlay" id="pauseModal">
+        <div class="modal-content">
+            <div class="modal-icon">⏸️</div>
+            <div class="modal-title">已暂停</div>
+            <div class="modal-text">休息一下吧，答题进度已保存</div>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="resumeQuiz()">▶️ 继续答题</button>
+                <button class="btn-secondary" onclick="quitQuiz()">🚪 退出保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 底部导航 ===== -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" onclick="showPage('pageMap')">
+            <span class="nav-icon">🗺️</span>
+            <span class="nav-label">闯关</span>
+        </button>
+        <button class="nav-item" onclick="showPage('pageWrongBook')">
+            <span class="nav-icon">📒</span>
+            <span class="nav-label">错题</span>
+        </button>
+    </nav>
+
+    <script>
+        // ===== 数据存储 =====
+        const STORAGE_KEY = 'science_challenge_progress';
+        
+        // 关卡配置
+        const LEVELS = [
+            { id: 1, name: '物理变化\nvs化学变化', icon: '⚗️', topics: ['物理变化与化学变化的本质区别', '常见变化类型的判断', '是否有新物质生成'], questionCount: 10, time: 15 },
+            { id: 2, name: '太阳系\n日食月食', icon: '🌌', topics: ['八大行星顺序与特征', '日食月食的形成原理', '农历日期判断'], questionCount: 10, time: 15 },
+            { id: 3, name: '地球自转\n与公转', icon: '🌍', topics: ['自转与公转的区别', '昼夜交替与四季形成', '太阳高度变化'], questionCount: 10, time: 15 },
+            { id: 4, name: '植物结构\n与功能', icon: '🌱', topics: ['植物六大器官', '导管与筛管', '光合作用与蒸腾作用'], questionCount: 10, time: 15 },
+            { id: 5, name: '动物分类\n变态发育', icon: '🦋', topics: ['脊椎动物五类特征', '完全变态与不完全变态', '恒温与变温动物'], questionCount: 10, time: 15 },
+            { id: 6, name: '人体系统', icon: '🫀', topics: ['八大系统功能', '消化与吸收', '呼吸与循环'], questionCount: 10, time: 15 },
+            { id: 7, name: '力与运动', icon: '⚡', topics: ['重力弹力摩擦力', '力与运动的关系', '平衡力与相互作用力'], questionCount: 10, time: 15 },
+            { id: 8, name: '电与磁', icon: '🔌', topics: ['串联与并联电路', '电路故障判断', '电磁铁原理'], questionCount: 10, time: 15 },
+            { id: 9, name: '声音与光', icon: '🔊', topics: ['声音的产生与传播', '光的反射与折射', '声音三要素'], questionCount: 10, time: 15 },
+            { id: 10, name: '热与温度', icon: '🌡️', topics: ['六种物态变化', '温度与热量', '晶体熔化特点'], questionCount: 10, time: 15 },
+            { id: 11, name: '工程类', icon: '🏗️', topics: ['塔台稳定性', '桥梁结构', '三角形稳定性'], questionCount: 10, time: 15 },
+            { id: 12, name: '科学测量', icon: '📏', topics: ['测量工具使用', '实验设计', '误差与数据处理'], questionCount: 10, time: 15 },
+            { id: 13, name: '细胞遗传', icon: '🔬', topics: ['细胞结构', '显微镜使用', '遗传与变异'], questionCount: 10, time: 15 },
+            { id: 14, name: '初一衔接', icon: '📐', topics: ['密度计算', '速度计算', '单位换算'], questionCount: 10, time: 15 },
+            { id: 15, name: '综合模拟', icon: '🏆', topics: ['综合知识点', '实验探究', '真题模拟'], questionCount: 15, time: 25 }
+        ];
+
+        // 真题数据库（基于之前生成的15天复习资料）
+        const QUESTIONS = {
+            1: [ // 物理变化 vs 化学变化
+                {
+                    id: '2023_滨江_01',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '晓明观察到厨房里每天都会发生许多变化，下列变化属于物理变化的是（    ）',
+                    options: ['A. 苹果腐烂', 'B. 菜刀生锈', 'C. 榨取果汁', 'D. 米饭变馊'],
+                    answer: 'C',
+                    analysis: '榨取果汁只是将水果的形态改变，没有新物质生成，属于物理变化。苹果腐烂、菜刀生锈、米饭变馊都有新物质生成，属于化学变化。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_01',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列变化中，属于化学变化的是（    ）',
+                    options: ['A. 冰雪融化', 'B. 酒精挥发', 'C. 纸张燃烧', 'D. 玻璃破碎'],
+                    answer: 'C',
+                    analysis: '纸张燃烧生成二氧化碳和水，有新物质生成，属于化学变化。冰雪融化、酒精挥发、玻璃破碎都没有新物质生成，属于物理变化。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_03',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列变化都属于化学变化的是（    ）',
+                    options: ['A. 制作蜡像、食物变馊', 'B. 白糖烧焦、冷藏食物', 'C. 白醋浸泡贝壳、咬过后的苹果放久颜色变深', 'D. 冰融化、铁生锈'],
+                    answer: 'C',
+                    analysis: '白醋浸泡贝壳产生二氧化碳（新物质），苹果变色是氧化反应（新物质），都是化学变化。A中制作蜡像是物理变化；B中冷藏食物是物理变化；D中冰融化是物理变化。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_滨江_01b',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列现象中，属于物理变化的是（    ）',
+                    options: ['A. 铁生锈', 'B. 木柴燃烧', 'C. 酒精挥发', 'D. 食物腐烂'],
+                    answer: 'C',
+                    analysis: '酒精挥发只是状态改变（液态→气态），没有新物质生成，属于物理变化。铁生锈、木柴燃烧、食物腐烂都有新物质生成。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_临平_01',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '判断一个变化是物理变化还是化学变化的根本依据是（    ）',
+                    options: ['A. 是否发光发热', 'B. 是否有颜色变化', 'C. 是否有气体产生', 'D. 是否有新物质生成'],
+                    answer: 'D',
+                    analysis: '判断物理变化和化学变化的唯一标准是有无新物质生成。发光发热、颜色变化、气体产生都是现象，不能作为判断依据。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_01',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列变化中，既有物理变化又有化学变化的是（    ）',
+                    options: ['A. 冰融化', 'B. 蜡烛燃烧', 'C. 玻璃破碎', 'D. 酒精挥发'],
+                    answer: 'B',
+                    analysis: '蜡烛燃烧时，蜡受热熔化是物理变化，蜡燃烧生成二氧化碳和水是化学变化。化学变化中一定伴随物理变化。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_上城_01',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '下列变化属于化学变化的是（    ）\n①冰雪融化 ②铁生锈 ③酒精挥发 ④食物腐烂 ⑤火药爆炸 ⑥干冰升华',
+                    options: ['A. ①②④', 'B. ②④⑤', 'C. ③⑤⑥', 'D. ①③⑥'],
+                    answer: 'B',
+                    analysis: '②铁生锈、④食物腐烂、⑤火药爆炸都有新物质生成，属于化学变化。①冰雪融化、③酒精挥发、⑥干冰升华都是状态改变，属于物理变化。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_钱塘_01',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列变化中，不属于化学变化的是（    ）',
+                    options: ['A. 葡萄酿酒', 'B. 面包发霉', 'C. 矿石粉碎', 'D. 铁锅生锈'],
+                    answer: 'C',
+                    analysis: '矿石粉碎只是形状大小改变，没有新物质生成，属于物理变化。葡萄酿酒、面包发霉、铁锅生锈都有新物质生成。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_02',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列诗句中，只涉及物理变化的是（    ）',
+                    options: ['A. 野火烧不尽，春风吹又生', 'B. 千锤万凿出深山，烈火焚烧若等闲', 'C. 只要功夫深，铁杵磨成针', 'D. 春蚕到死丝方尽，蜡炬成灰泪始干'],
+                    answer: 'C',
+                    analysis: '"铁杵磨成针"只是形状改变，没有新物质生成，属于物理变化。其他选项都涉及燃烧等化学变化。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_滨江_02',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列说法正确的是（    ）',
+                    options: ['A. 发光发热的变化一定是化学变化', 'B. 有气体产生的变化一定是化学变化', 'C. 颜色变化的变化一定是化学变化', 'D. 有新物质生成的变化一定是化学变化'],
+                    answer: 'D',
+                    analysis: '灯泡发光发热是物理变化，水沸腾产生气体是物理变化，氧气液化变蓝是物理变化。只有"有新物质生成"才是化学变化的本质特征。',
+                    knowledge: '物理变化vs化学变化',
+                    difficulty: '中'
+                }
+            ],
+            2: [ // 太阳系与日食月食
+                {
+                    id: '2023_滨江_02',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '如图是太阳、地球和月球的相对位置（简图），数字表示月球绕地球运动时的不同位置。当月球在（    ）位置时，地球上的人可能会看到日食。',
+                    options: ['A. 1', 'B. 2', 'C. 3', 'D. 4'],
+                    answer: 'A',
+                    analysis: '日食发生时，月球位于太阳和地球之间，遮挡太阳光。位置1时月球在太阳和地球之间，可能形成日食。位置3时地球在太阳和月球之间，可能形成月食。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '中',
+                    image: '日食月食位置图'
+                },
+                {
+                    id: '2024_临平_03',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '在太阳系中，与地球相邻的行星是（    ）',
+                    options: ['A. 水星和金星', 'B. 金星和火星', 'C. 火星和木星', 'D. 木星和土星'],
+                    answer: 'B',
+                    analysis: '太阳系八大行星按距太阳由近到远：水星、金星、地球、火星、木星、土星、天王星、海王星。地球位于第三颗，相邻的是金星（第二颗）和火星（第四颗）。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_15',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '地球上最大的淡水资源库是（    ）',
+                    options: ['A. 南北极的冰川', 'B. 陆地上的江河湖泊', 'C. 地下水', 'D. 海水'],
+                    answer: 'A',
+                    analysis: '地球上约68.7%的淡水以冰川形式存在于南北极和高山地区，这是最大的淡水资源库。海水是咸水，不是淡水。江河湖泊和地下水虽然重要，但总量远小于冰川。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_04',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列关于太阳系的叙述，正确的是（    ）',
+                    options: ['A. 太阳是太阳系中最大的行星', 'B. 月球是太阳系中的行星', 'C. 太阳系中只有八大行星', 'D. 太阳系以太阳为中心'],
+                    answer: 'D',
+                    analysis: '太阳是恒星不是行星；月球是卫星不是行星；太阳系除八大行星外还有卫星、小行星、彗星等；太阳系以太阳为中心是正确的。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_05',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '月食发生时，太阳、地球、月球三者的位置关系是（    ）',
+                    options: ['A. 太阳→月球→地球', 'B. 太阳→地球→月球', 'C. 地球→太阳→月球', 'D. 月球→地球→太阳'],
+                    answer: 'B',
+                    analysis: '月食是地球运行到太阳和月球之间，地球阴影遮挡月球。三球位置关系是太阳→地球→月球（一直线）。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_上城_03',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '日食一般发生在农历的（    ）',
+                    options: ['A. 初一', 'B. 初七', 'C. 十五', 'D. 二十三'],
+                    answer: 'A',
+                    analysis: '日食发生在农历初一（新月），此时月球位于太阳和地球之间。月食发生在农历十五（满月）。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_03',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '太阳系中，自转方向与其他行星相反的是（    ）',
+                    options: ['A. 水星', 'B. 金星', 'C. 火星', 'D. 木星'],
+                    answer: 'B',
+                    analysis: '金星的自转方向与其他行星相反（逆向自转），是太阳系中唯一逆向自转的大行星。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_04',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列行星中，有最多卫星的是（    ）',
+                    options: ['A. 地球', 'B. 火星', 'C. 木星', 'D. 土星'],
+                    answer: 'C',
+                    analysis: '木星有79颗已知卫星，是太阳系中卫星最多的行星。土星有62颗，地球只有1颗（月球）。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_临安_04',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '关于日食和月食，下列说法正确的是（    ）',
+                    options: ['A. 日食和月食每月都会发生', 'B. 日食和月食可以同时在地球上被观测到', 'C. 日食是月球挡住了太阳，月食是地球挡住了太阳照向月球的光', 'D. 日食和月食发生时，三球不一定在一条直线上'],
+                    answer: 'C',
+                    analysis: '日食是月球挡住了太阳；月食是地球挡住了太阳照向月球的光。日食月食不是每月都发生（需要特定条件）；日食和月食不能同时被观测；三球必须在一条直线上。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_05',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '火星被称为"红色星球"的原因是（    ）',
+                    options: ['A. 火星表面温度很高', 'B. 火星表面有大量氧化铁', 'C. 火星大气呈红色', 'D. 火星土壤是红色的'],
+                    answer: 'B',
+                    analysis: '火星表面有大量氧化铁（铁锈），使火星呈现红色。火星温度不高，大气稀薄，土壤因含氧化铁而呈红色。',
+                    knowledge: '太阳系与日食月食',
+                    difficulty: '中'
+                }
+            ],
+            3: [ // 地球自转与公转
+                {
+                    id: '2023_滨江_31',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '填空题',
+                    question: '2023年5月30日9时31分，搭载神舟十六号载人飞船的长征二号F遥十六运载火箭在酒泉卫星发射中心点火发射。\n(1) 发射当天，地球的位置大致处在图中的（    ）位置；（填"a""b""c""d"）\n(2) 这天杭州的昼夜长短状况是（    ）（选填"昼长夜短""昼短夜长""昼夜平分"）\n(3) 一年中，杭州市白昼最长的一天是（    ）（填日期）\n(4) 杭州不同季节昼夜长短不同，这一现象主要与地球（    ）运动相关。',
+                    options: ['A. 发射当天地球位置在a处', 'B. 杭州昼长夜短', 'C. 6月22日', 'D. 公转'],
+                    answer: 'B',
+                    analysis: '5月30日处于春分（3月21日）和夏至（6月22日）之间，太阳直射北半球且向北移动。此时北半球昼长夜短，且白昼越来越长。夏至日太阳直射北回归线，北半球白昼最长。昼夜长短变化是地球公转的结果。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '中',
+                    image: '地球公转示意图'
+                },
+                {
+                    id: '2024_上城_05',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '同一地点，不同季节正午时分物体的影长不同是因为（    ）',
+                    options: ['A. 不同季节正午时分的气温不同', 'B. 不同季节天气状况不同', 'C. 不同季节正午时分的太阳照射角度不同', 'D. 不同季节每天的日照时间不同'],
+                    answer: 'C',
+                    analysis: '影长变化的原因是太阳高度角的变化。夏季太阳高度大，影子短；冬季太阳高度小，影子长。太阳高度变化是地球公转导致太阳直射点移动的结果。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_临安_04',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '在不同的季节，同一地点的正午太阳高度会发生变化。这是因为（    ）',
+                    options: ['A. 地球公转轨道不断发生变化', 'B. 地球自转的轴不断发生变化', 'C. 地轴是倾斜的，并且倾斜的方向保持不变', 'D. 地球公转轨道是球形'],
+                    answer: 'C',
+                    analysis: '地轴倾斜且方向保持不变，导致地球公转时太阳直射点在南北回归线之间移动，从而引起正午太阳高度的季节变化。地球公转轨道基本不变，地轴倾斜方向也不变。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_05',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '地球自转产生的现象是（    ）',
+                    options: ['A. 四季变化', 'B. 昼夜交替', 'C. 昼夜长短变化', 'D. 太阳高度变化'],
+                    answer: 'B',
+                    analysis: '地球自转产生昼夜交替、日月星辰东升西落、时差。四季变化、昼夜长短变化、太阳高度变化是地球公转产生的。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_06',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列现象中，主要由地球公转产生的是（    ）',
+                    options: ['A. 昼夜交替', 'B. 四季变化', 'C. 日月星辰东升西落', 'D. 一天24小时'],
+                    answer: 'B',
+                    analysis: '四季变化是地球公转产生的。昼夜交替、日月星辰东升西落、一天24小时都是地球自转产生的。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_06',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '北半球夏至日时，太阳直射在（    ）',
+                    options: ['A. 赤道', 'B. 北回归线', 'C. 南回归线', 'D. 北极圈'],
+                    answer: 'B',
+                    analysis: '夏至日（6月22日前后），太阳直射北回归线（23.5°N）。此时北半球昼最长夜最短。春分秋分直射赤道，冬至直射南回归线。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_04',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '杭州位于北半球，当澳大利亚（南半球）是夏季时，杭州的季节是（    ）',
+                    options: ['A. 春季', 'B. 夏季', 'C. 秋季', 'D. 冬季'],
+                    answer: 'D',
+                    analysis: '北半球和南半球季节相反。澳大利亚夏季时（12月-2月），北半球是冬季。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_06',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '地球公转时，地轴倾斜角度约是（    ）',
+                    options: ['A. 23.5°', 'B. 66.5°', 'C. 90°', 'D. 45°'],
+                    answer: 'B',
+                    analysis: '地球公转时，地轴倾斜角度约66.5°（与公转轨道面垂直方向），或者说地轴与公转轨道面夹角约66.5°。黄赤交角是23.5°。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_临安_05',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列城市中，昼夜长短变化幅度最大的是（    ）',
+                    options: ['A. 杭州（约30°N）', 'B. 北京（约40°N）', 'C. 广州（约23°N）', 'D. 哈尔滨（约45°N）'],
+                    answer: 'D',
+                    analysis: '纬度越高，昼夜长短变化幅度越大。哈尔滨纬度最高（约45°N），所以昼夜长短变化幅度最大。赤道附近昼夜长短变化最小。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_06',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '从春分日到夏至日，太阳直射点的移动方向是（    ）',
+                    options: ['A. 从赤道向南回归线移动', 'B. 从赤道向北回归线移动', 'C. 从北回归线向赤道移动', 'D. 从南回归线向赤道移动'],
+                    answer: 'B',
+                    analysis: '春分日（3月21日）太阳直射赤道，夏至日（6月22日）直射北回归线。从春分日到夏至日，太阳直射点从赤道向北回归线移动。',
+                    knowledge: '地球自转与公转',
+                    difficulty: '中'
+                }
+            ],
+            4: [ // 植物结构与功能
+                {
+                    id: '2023_滨江_05',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '植物体内运输水和无机盐的结构是（    ）',
+                    options: ['A. 导管', 'B. 筛管', 'C. 气孔', 'D. 根毛'],
+                    answer: 'A',
+                    analysis: '导管是运输水和无机盐的管道，位于木质部，方向自下而上。筛管运输有机物，气孔是气体交换门户，根毛是吸收结构。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_08',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '如图为植物叶片结构示意图，气体交换和水分散失的门户是（    ）',
+                    options: ['A. ①上表皮', 'B. ②叶肉', 'C. ③叶脉', 'D. ④气孔'],
+                    answer: 'D',
+                    analysis: '气孔是叶片表皮上的小孔，由保卫细胞控制开闭，是气体交换和水分蒸腾的门户。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '易',
+                    image: '叶片结构示意图'
+                },
+                {
+                    id: '2023_钱塘_07',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '将一段带叶的柳枝插入稀释的红墨水中，在阳光下照射几小时后，茎的哪一部分会被染红？（    ）',
+                    options: ['A. 树皮', 'B. 木质部', 'C. 韧皮部', 'D. 髓'],
+                    answer: 'B',
+                    analysis: '红墨水模拟水和无机盐，通过导管自下而上运输，导管位于木质部。所以木质部会被染红。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_07',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '植物进行光合作用的主要场所是（    ）',
+                    options: ['A. 根', 'B. 茎', 'C. 叶', 'D. 花'],
+                    answer: 'C',
+                    analysis: '叶是植物进行光合作用的主要场所，因为叶片含有大量叶绿体，且叶片的结构（如气孔）有利于吸收二氧化碳和光能。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_07',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列关于植物根毛的叙述，正确的是（    ）',
+                    options: ['A. 根毛是根尖分生区的细胞', 'B. 根毛可以增加根吸收水分的表面积', 'C. 根毛是死细胞', 'D. 根毛只能吸收无机盐'],
+                    answer: 'B',
+                    analysis: '根毛是根尖成熟区表皮细胞向外突起形成的，大大增加了根吸收水分的表面积。根毛是活细胞，主要吸收水和无机盐。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_上城_08',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '植物体内运输有机物的结构是（    ），位于（    ）',
+                    options: ['A. 导管，木质部', 'B. 筛管，韧皮部', 'C. 导管，韧皮部', 'D. 筛管，木质部'],
+                    answer: 'B',
+                    analysis: '筛管运输有机物，位于韧皮部，方向自上而下。导管运输水和无机盐，位于木质部。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_06',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '蒸腾作用对植物生活的意义不包括（    ）',
+                    options: ['A. 促进水分和无机盐的运输', 'B. 降低叶片温度', 'C. 增加大气湿度', 'D. 合成有机物'],
+                    answer: 'D',
+                    analysis: '蒸腾作用的意义：促进水分和无机盐运输、降低叶片温度、增加大气湿度。合成有机物是光合作用的功能，不是蒸腾作用。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_09',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列结构中，属于植物细胞特有的是（    ）',
+                    options: ['A. 细胞壁', 'B. 细胞膜', 'C. 细胞核', 'D. 线粒体'],
+                    answer: 'A',
+                    analysis: '细胞壁是植物细胞特有的结构，动物细胞没有。细胞膜、细胞核、线粒体是动植物细胞共有的。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_08',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '俗话说"树怕剥皮"，是因为剥皮会破坏（    ），影响（    ）的运输',
+                    options: ['A. 导管，水和无机盐', 'B. 筛管，有机物', 'C. 气孔，气体', 'D. 根毛，水分'],
+                    answer: 'B',
+                    analysis: '"树怕剥皮"是因为剥皮会破坏韧皮部中的筛管，影响有机物的运输。筛管自上而下运输有机物，如果被破坏，根部得不到营养，树会死亡。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_08',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '绿色植物进行光合作用的原料是（    ）',
+                    options: ['A. 二氧化碳和水', 'B. 氧气和水', 'C. 二氧化碳和氧气', 'D. 有机物和氧气'],
+                    answer: 'A',
+                    analysis: '光合作用的原料是二氧化碳和水，产物是有机物和氧气，条件是光，场所是叶绿体。',
+                    knowledge: '植物结构与功能',
+                    difficulty: '易'
+                }
+            ],
+            5: [ // 动物分类与变态发育
+                {
+                    id: '2023_滨江_06',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列动物中，属于完全变态发育的是（    ）',
+                    options: ['A. 蝗虫', 'B. 蟋蟀', 'C. 蝴蝶', 'D. 螳螂'],
+                    answer: 'C',
+                    analysis: '蝴蝶的发育经过卵→幼虫→蛹→成虫四个阶段，属于完全变态发育。蝗虫、蟋蟀、螳螂都是不完全变态发育。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_临平_09',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '青蛙的生殖发育特点是（    ）',
+                    options: ['A. 体内受精，卵生', 'B. 体外受精，变态发育', 'C. 胎生哺乳', 'D. 体内受精，变态发育'],
+                    answer: 'B',
+                    analysis: '青蛙在水中产卵，精子和卵细胞在水中结合（体外受精），发育过程经过蝌蚪到成蛙的变化（变态发育）。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_08',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列动物中，体温恒定的是（    ）',
+                    options: ['A. 蛇', 'B. 青蛙', 'C. 鲫鱼', 'D. 鸽子'],
+                    answer: 'D',
+                    analysis: '鸽子是鸟类，属于恒温动物，体温不随环境温度变化。蛇（爬行类）、青蛙（两栖类）、鲫鱼（鱼类）都是变温动物。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_10',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列动物中，属于哺乳动物的是（    ）',
+                    options: ['A. 企鹅', 'B. 蝙蝠', 'C. 鸵鸟', 'D. 鳄鱼'],
+                    answer: 'B',
+                    analysis: '蝙蝠是哺乳动物，具有胎生哺乳、体表有毛、恒温等特征。企鹅和鸵鸟是鸟类，鳄鱼是爬行类。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_09',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列动物中，属于体内受精的是（    ）',
+                    options: ['A. 鲫鱼', 'B. 青蛙', 'C. 蛇', 'D. 鲤鱼'],
+                    answer: 'C',
+                    analysis: '蛇是爬行类，体内受精。鲫鱼、鲤鱼是鱼类，青蛙是两栖类，都是体外受精。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_上城_09',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '蚕的发育过程是（    ）',
+                    options: ['A. 卵→若虫→成虫', 'B. 卵→幼虫→蛹→成虫', 'C. 卵→幼虫→成虫', 'D. 卵→蛹→成虫'],
+                    answer: 'B',
+                    analysis: '蚕的发育经过卵→幼虫（蚕）→蛹→成虫（蚕蛾）四个阶段，属于完全变态发育。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_07',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列动物中，用鳃呼吸的是（    ）',
+                    options: ['A. 蜥蜴', 'B. 鸽子', 'C. 鲫鱼', 'D. 兔子'],
+                    answer: 'C',
+                    analysis: '鲫鱼是鱼类，用鳃呼吸。蜥蜴（爬行类）用肺呼吸，鸽子（鸟类）用肺呼吸，兔子（哺乳类）用肺呼吸。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_临平_10',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列关于两栖动物的叙述，错误的是（    ）',
+                    options: ['A. 幼体生活在水中，用鳃呼吸', 'B. 成体水陆两栖，用肺呼吸', 'C. 体外受精，变态发育', 'D. 体温恒定'],
+                    answer: 'D',
+                    analysis: '两栖动物是变温动物，体温随环境温度变化。A、B、C都是两栖动物的正确特征。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_临安_09',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列昆虫中，发育过程没有蛹期的是（    ）',
+                    options: ['A. 蜜蜂', 'B. 蝴蝶', 'C. 蝗虫', 'D. 蚊子'],
+                    answer: 'C',
+                    analysis: '蝗虫的发育经过卵→若虫→成虫三个阶段，没有蛹期，属于不完全变态。蜜蜂、蝴蝶、蚊子都有蛹期，属于完全变态。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_11',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列动物中，与人类的亲缘关系最近的是（    ）',
+                    options: ['A. 黑猩猩', 'B. 猴子', 'C. 狒狒', 'D. 长臂猿'],
+                    answer: 'A',
+                    analysis: '黑猩猩与人类的基因相似度最高（约98.7%），是与人类亲缘关系最近的动物。',
+                    knowledge: '动物分类与变态发育',
+                    difficulty: '中'
+                }
+            ],
+            6: [ // 人体系统
+                {
+                    id: '2023_滨江_07',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '人体消化和吸收的主要场所是（    ）',
+                    options: ['A. 口腔', 'B. 胃', 'C. 小肠', 'D. 大肠'],
+                    answer: 'C',
+                    analysis: '小肠长约5-6米，内有环形皱襞和小肠绒毛，增加了消化和吸收面积，是消化和吸收的主要场所。',
+                    knowledge: '人体系统',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_10',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '如图为肺泡结构示意图，肺泡适于气体交换的特点是（    ）\n①肺泡数量多 ②肺泡壁薄，仅由一层上皮细胞构成 ③肺泡外缠绕丰富的毛细血管 ④肺泡内有纤毛',
+                    options: ['A. ①②', 'B. ②③', 'C. ①②③', 'D. ①②③④'],
+                    answer: 'C',
+                    analysis: '肺泡数量多、壁薄、周围缠绕毛细血管，这些特点都有利于气体交换。肺泡内没有纤毛。',
+                    knowledge: '人体系统',
+                    difficulty: '中',
+                    image: '肺泡结构示意图'
+                },
+                {
+                    id: '2023_钱塘_09',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '血液流经小肠后，血液成分的变化是（    ）',
+                    options: ['A. 氧气增多，养料减少', 'B. 氧气减少，养料增多', 'C. 氧气和养料都增多', 'D. 氧气和养料都减少'],
+                    answer: 'B',
+                    analysis: '小肠吸收营养物质，所以养料增多；小肠细胞消耗氧气进行呼吸作用，所以氧气减少。',
+                    knowledge: '人体系统',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_11',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '人体血液循环的动力器官是（    ）',
+                    options: ['A. 血管', 'B. 血液', 'C. 心脏', 'D. 肺'],
+                    answer: 'C',
+                    analysis: '心脏是血液循环的动力器官，通过收缩和舒张推动血液在血管中流动。',
+                    knowledge: '人体系统',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_10',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列器官中，属于呼吸系统的是（    ）',
+                    options: ['A. 胃', 'B. 肝脏', 'C. 肺', 'D. 肾脏'],
+                    answer: 'C',
+                    analysis: '肺是呼吸系统的主要器官，负责气体交换。胃和肝脏属于消化系统，肾脏属于泌尿系统。',
+                    knowledge: '人体系统',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_12',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '吸气时，膈肌的状态是（    ），膈顶（    ）',
+                    options: ['A. 收缩，上升', 'B. 收缩，下降', 'C. 舒张，上升', 'D. 舒张，下降'],
+                    answer: 'B',
+                    analysis: '吸气时，膈肌收缩，膈顶下降，胸腔扩大，肺扩张，气体进入肺。呼气时膈肌舒张，膈顶上升。',
+                    knowledge: '人体系统',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_滨江_08',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列关于血液的叙述，正确的是（    ）',
+                    options: ['A. 动脉血含氧少，颜色暗红', 'B. 静脉血含氧多，颜色鲜红', 'C. 肺动脉中流的是动脉血', 'D. 肺静脉中流的是动脉血'],
+                    answer: 'D',
+                    analysis: '肺静脉中流的是动脉血（含氧多，颜色鲜红）。动脉血含氧多颜色鲜红，静脉血含氧少颜色暗红。肺动脉中流的是静脉血。',
+                    knowledge: '人体系统',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_上城_11',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '人体排泄的途径不包括（    ）',
+                    options: ['A. 通过呼吸系统呼出气体', 'B. 通过泌尿系统排出尿液', 'C. 通过皮肤排出汗液', 'D. 通过消化系统排出粪便'],
+                    answer: 'D',
+                    analysis: '排泄是指排出代谢废物（如二氧化碳、尿素、多余水分）。粪便属于食物残渣，排出粪便属于排遗，不是排泄。',
+                    knowledge: '人体系统',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_钱塘_10',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列关于神经系统的叙述，错误的是（    ）',
+                    options: ['A. 脑和脊髓是中枢神经系统', 'B. 神经是周围神经系统', 'C. 脑是人体的"司令部"', 'D. 脊髓没有反射功能'],
+                    answer: 'D',
+                    analysis: '脊髓有反射功能（如膝跳反射），是低级神经中枢。脑和脊髓组成中枢神经系统，神经组成周围神经系统。',
+                    knowledge: '人体系统',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_12',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '人体最大的消化腺是（    ）',
+                    options: ['A. 唾液腺', 'B. 胃腺', 'C. 肝脏', 'D. 胰腺'],
+                    answer: 'C',
+                    analysis: '肝脏是人体最大的消化腺，分泌胆汁，帮助消化脂肪。胆汁不含消化酶，但能乳化脂肪。',
+                    knowledge: '人体系统',
+                    difficulty: '易'
+                }
+            ],
+            7: [ // 力与运动
+                {
+                    id: '2023_滨江_08',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列措施中，属于增大摩擦的是（    ）',
+                    options: ['A. 给机器加润滑油', 'B. 用滚动代替滑动', 'C. 轮胎上有花纹', 'D. 使用气垫'],
+                    answer: 'C',
+                    analysis: '轮胎上有花纹增大了接触面的粗糙程度，从而增大摩擦。加润滑油、用滚动代替滑动、使用气垫都是减小摩擦。',
+                    knowledge: '力与运动',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_11',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '如图所示，物体静止在水平桌面上，下列说法正确的是（    ）',
+                    options: ['A. 物体受到的重力和支持力是一对平衡力', 'B. 物体受到的重力和压力是一对平衡力', 'C. 物体对桌面的压力和桌面对物体的支持力是一对平衡力', 'D. 物体受到的重力和物体对桌面的压力是一对平衡力'],
+                    answer: 'A',
+                    analysis: '重力和支持力都作用在物体上，大小相等、方向相反、作用在同一直线上，是一对平衡力。其他选项要么作用在不同物体上，要么方向相同。',
+                    knowledge: '力与运动',
+                    difficulty: '中',
+                    image: '物体受力示意图'
+                },
+                {
+                    id: '2023_临安_10',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '关于力和运动的关系，下列说法正确的是（    ）',
+                    options: ['A. 物体受力就一定运动', 'B. 物体不受力就一定静止', 'C. 物体运动一定受力', 'D. 物体运动状态改变一定受力'],
+                    answer: 'D',
+                    analysis: '力是改变物体运动状态的原因，不是维持运动的原因。物体运动状态改变（速度大小或方向改变）一定受到非平衡力。不受力的物体可能静止，也可能匀速直线运动。',
+                    knowledge: '力与运动',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_13',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列现象中，属于利用惯性的是（    ）',
+                    options: ['A. 汽车限速行驶', 'B. 汽车安全带', 'C. 跳远时助跑', 'D. 汽车保持车距'],
+                    answer: 'C',
+                    analysis: '跳远时助跑是利用惯性，使人起跳后保持向前的运动状态。限速、安全带、保持车距都是防止惯性带来的危害。',
+                    knowledge: '力与运动',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_钱塘_11',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列关于重力的叙述，正确的是（    ）',
+                    options: ['A. 重力方向垂直向下', 'B. 重力方向竖直向下', 'C. 重力大小与物体体积有关', 'D. 重力大小与物体形状有关'],
+                    answer: 'B',
+                    analysis: '重力方向竖直向下（指向地心），大小与质量成正比（G=mg），与体积、形状无关。',
+                    knowledge: '力与运动',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_12',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '下列关于弹力的叙述，错误的是（    ）',
+                    options: ['A. 弹力是物体发生弹性形变时产生的', 'B. 弹簧测力计利用弹力工作', 'C. 弹力方向与形变方向相同', 'D. 在弹性限度内，弹簧伸长与拉力成正比'],
+                    answer: 'C',
+                    analysis: '弹力方向与形变方向相反（如弹簧被拉长，弹力方向是收缩方向）。A、B、D都是正确的。',
+                    knowledge: '力与运动',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_滨江_09',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列关于摩擦力的叙述，正确的是（    ）',
+                    options: ['A. 摩擦力总是阻碍物体运动', 'B. 静止的物体不受摩擦力', 'C. 摩擦力方向与相对运动方向相反', 'D. 摩擦力大小与接触面积有关'],
+                    answer: 'C',
+                    analysis: '摩擦力方向与相对运动（或相对运动趋势）方向相反。摩擦力有时是动力（如走路时静摩擦力推动人前进）。静止物体可能受静摩擦力。摩擦力大小与压力和粗糙程度有关，与接触面积无关。',
+                    knowledge: '力与运动',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_13',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '如图所示，用弹簧测力计测量物体的重力，读数时视线应该（    ）',
+                    options: ['A. 斜视', 'B. 俯视', 'C. 与指针相平', 'D. 仰视'],
+                    answer: 'C',
+                    analysis: '使用弹簧测力计时，读数视线应与指针相平（平视），避免俯视或仰视造成读数误差。',
+                    knowledge: '力与运动',
+                    difficulty: '易',
+                    image: '弹簧测力计读数图'
+                },
+                {
+                    id: '2023_临安_11',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列关于牛顿第一定律的叙述，正确的是（    ）',
+                    options: ['A. 牛顿第一定律可以直接用实验验证', 'B. 牛顿第一定律说明力是维持运动的原因', 'C. 牛顿第一定律说明物体不受力时保持静止或匀速直线运动', 'D. 牛顿第一定律只适用于静止的物体'],
+                    answer: 'C',
+                    analysis: '牛顿第一定律：物体不受力时，保持静止或匀速直线运动状态。力是改变运动状态的原因，不是维持运动的原因。牛顿第一定律是在实验基础上推理得出的，不能直接用实验验证。',
+                    knowledge: '力与运动',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_14',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列关于二力平衡的叙述，错误的是（    ）',
+                    options: ['A. 两个力大小相等', 'B. 两个力方向相反', 'C. 两个力作用在不同物体上', 'D. 两个力作用在同一直线上'],
+                    answer: 'C',
+                    analysis: '二力平衡的条件：大小相等、方向相反、作用在同一物体上、作用在同一直线上。C选项描述的是相互作用力（作用力与反作用力），不是平衡力。',
+                    knowledge: '力与运动',
+                    difficulty: '中'
+                }
+            ],
+            8: [ // 电与磁
+                {
+                    id: '2023_滨江_09',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '如图所示的电路，当开关S闭合时，灯泡L₁和L₂的连接方式是（    ）',
+                    options: ['A. 串联', 'B. 并联', 'C. 混联', 'D. 无法判断'],
+                    answer: 'B',
+                    analysis: '电流从电源正极流出后，分成两条路径分别经过L₁和L₂，然后汇合回到负极，这是并联电路。',
+                    knowledge: '电与磁',
+                    difficulty: '中',
+                    image: '电路连接图'
+                },
+                {
+                    id: '2024_临平_12',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列做法中，属于增大电磁铁磁性的是（    ）',
+                    options: ['A. 减少线圈匝数', 'B. 减小电流', 'C. 抽出铁芯', 'D. 增加线圈匝数'],
+                    answer: 'D',
+                    analysis: '电磁铁磁性强弱与电流大小、线圈匝数、有无铁芯有关。增加线圈匝数可以增强磁性。减少匝数、减小电流、抽出铁芯都会减弱磁性。',
+                    knowledge: '电与磁',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_11',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '如图所示，当开关S闭合后，灯泡L₁亮，L₂不亮，原因可能是（    ）',
+                    options: ['A. L₁断路', 'B. L₂断路', 'C. L₁短路', 'D. 电源没电'],
+                    answer: 'B',
+                    analysis: 'L₁亮说明电路是通路，电源有电。L₂不亮可能是L₂断路（灯丝断了）或L₂短路。如果是L₂短路，L₁会更亮。题目说L₁正常亮，所以最可能是L₂断路。',
+                    knowledge: '电与磁',
+                    difficulty: '中',
+                    image: '电路故障图'
+                },
+                {
+                    id: '2024_上城_13',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '家庭电路中，各用电器的连接方式是（    ），原因是（    ）',
+                    options: ['A. 串联，省电', 'B. 并联，互不影响', 'C. 串联，电流大', 'D. 并联，电压高'],
+                    answer: 'B',
+                    analysis: '家庭电路中各用电器并联，因为并联时各用电器互不影响，可以独立工作。串联时一个用电器损坏，其他都不能工作。',
+                    knowledge: '电与磁',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_12',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列关于电路的叙述，正确的是（    ）',
+                    options: ['A. 短路时电路中电流很小', 'B. 断路时电路中电流为零', 'C. 通路时电路中一定有电流', 'D. 以上都正确'],
+                    answer: 'B',
+                    analysis: '断路时电路断开，电流为零。短路时电流很大（会损坏电源）。通路时如果有电源且电路闭合，才有电流。',
+                    knowledge: '电与磁',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_14',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列关于电磁铁的叙述，错误的是（    ）',
+                    options: ['A. 电磁铁通电时有磁性', 'B. 电磁铁断电时无磁性', 'C. 电磁铁的磁性强弱不可改变', 'D. 电磁铁可以控制磁性的有无'],
+                    answer: 'C',
+                    analysis: '电磁铁的磁性强弱可以通过改变电流大小、线圈匝数、有无铁芯来改变。电磁铁的优点就是磁性可控。',
+                    knowledge: '电与磁',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_10',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列关于磁场的叙述，正确的是（    ）',
+                    options: ['A. 磁场看不见摸不着，不存在', 'B. 磁场只有南极和北极', 'C. 磁场对放入其中的磁体有力的作用', 'D. 磁场方向是从南极指向北极'],
+                    answer: 'C',
+                    analysis: '磁场是真实存在的，对放入其中的磁体有力的作用。磁场有无数个点，每个点有方向。磁场方向在磁体外部从北极指向南极。',
+                    knowledge: '电与磁',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_15',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '奥斯特实验说明了（    ）',
+                    options: ['A. 电流周围存在磁场', 'B. 磁场周围存在电流', 'C. 电流周围存在电场', 'D. 磁场可以产生电流'],
+                    answer: 'A',
+                    analysis: '奥斯特实验（1820年）证明了电流周围存在磁场，即电流的磁效应。这是电与磁联系的首次发现。',
+                    knowledge: '电与磁',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_钱塘_12',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列关于安全用电的叙述，错误的是（    ）',
+                    options: ['A. 不接触低压带电体', 'B. 不靠近高压带电体', 'C. 可以用湿手触摸开关', 'D. 发现有人触电应立即切断电源'],
+                    answer: 'C',
+                    analysis: '水是导体，湿手触摸开关容易触电。安全用电原则：不接触低压带电体，不靠近高压带电体。发现触电应立即切断电源。',
+                    knowledge: '电与磁',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_14',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '下列关于导体的叙述，正确的是（    ）',
+                    options: ['A. 金属都是导体', 'B. 塑料都是导体', 'C. 玻璃都是导体', 'D. 橡胶都是导体'],
+                    answer: 'A',
+                    analysis: '金属都是导体（如铜、铁、铝）。塑料、玻璃、橡胶都是绝缘体，不是导体。',
+                    knowledge: '电与磁',
+                    difficulty: '易'
+                }
+            ],
+            9: [ // 声音与光
+                {
+                    id: '2023_滨江_10',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列事例中，属于利用声音传递能量的是（    ）',
+                    options: ['A. 医生用听诊器诊断病情', 'B. 用超声波清洗眼镜', 'C. 用B超检查身体', 'D. 用声呐探测海底深度'],
+                    answer: 'B',
+                    analysis: '超声波清洗眼镜是利用声波的能量使污垢振动脱落，属于声音传递能量。其他选项都是利用声音传递信息。',
+                    knowledge: '声音与光',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_13',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列现象中，由于光的折射形成的是（    ）',
+                    options: ['A. 水中倒影', 'B. 手影游戏', 'C. 海市蜃楼', 'D. 镜中花'],
+                    answer: 'C',
+                    analysis: '海市蜃楼是光在不均匀的大气中发生折射形成的。水中倒影和镜中花是光的反射，手影是光的直线传播。',
+                    knowledge: '声音与光',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_临安_11',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '关于声音和光，下列说法正确的是（    ）',
+                    options: ['A. 声音可以在真空中传播', 'B. 光不能在真空中传播', 'C. 声音和光都可以传递信息和能量', 'D. 声音和光的传播速度相同'],
+                    answer: 'C',
+                    analysis: '声音和光都可以传递信息（如说话、看书）和能量（如超声波清洗、激光切割）。声音不能在真空中传播，光可以在真空中传播，光速远大于声速。',
+                    knowledge: '声音与光',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_15',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列关于声音三要素的叙述，正确的是（    ）',
+                    options: ['A. "引吭高歌"是指响度大', 'B. "尖声细嗓"是指响度小', 'C. "闻其声知其人"是指响度不同', 'D. "低声细语"是指音调低'],
+                    answer: 'A',
+                    analysis: '"引吭高歌"指大声唱歌，响度大。"尖声细嗓"指音调高。"闻其声知其人"指音色不同。"低声细语"指响度小。',
+                    knowledge: '声音与光',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_钱塘_13',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列关于光速的叙述，正确的是（    ）',
+                    options: ['A. 光在空气中的速度是340m/s', 'B. 光在真空中的速度是3×10⁸m/s', 'C. 光速比声速慢', 'D. 光在水中的速度比在空气中快'],
+                    answer: 'B',
+                    analysis: '光在真空中的速度是3×10⁸m/s（约30万公里/秒），是宇宙中最快的速度。声速约340m/s，光速远大于声速。光在介质中传播速度比真空中慢。',
+                    knowledge: '声音与光',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_15',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '下列关于平面镜成像的叙述，正确的是（    ）',
+                    options: ['A. 像比物体大', 'B. 像到镜面的距离大于物体到镜面的距离', 'C. 像是实像', 'D. 像与物体大小相等'],
+                    answer: 'D',
+                    analysis: '平面镜成像特点：像与物体大小相等，像到镜面的距离等于物体到镜面的距离，成的是虚像（不是实像）。',
+                    knowledge: '声音与光',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_11',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列关于光的反射的叙述，错误的是（    ）',
+                    options: ['A. 反射角等于入射角', 'B. 反射光线、入射光线和法线在同一平面内', 'C. 反射光线和入射光线分居法线两侧', 'D. 漫反射不遵循光的反射定律'],
+                    answer: 'D',
+                    analysis: '漫反射也遵循光的反射定律，只是反射面不平整，反射光线向各个方向。镜面反射和漫反射都遵循反射定律。',
+                    knowledge: '声音与光',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_16',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '彩虹是太阳光通过空气中的水滴后发生（    ）形成的',
+                    options: ['A. 反射', 'B. 折射', 'C. 直线传播', 'D. 散射'],
+                    answer: 'B',
+                    analysis: '彩虹是太阳光通过空气中的水滴时发生折射和色散形成的。白光被分解成七种色光（红橙黄绿蓝靛紫）。',
+                    knowledge: '声音与光',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_临安_13',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列关于声音传播的叙述，正确的是（    ）',
+                    options: ['A. 声音在真空中传播最快', 'B. 声音在固体中传播最快', 'C. 声音在液体中传播最快', 'D. 声音在气体中传播最快'],
+                    answer: 'B',
+                    analysis: '声音传播需要介质，不能在真空中传播。声音在固体中传播最快，液体次之，气体最慢。',
+                    knowledge: '声音与光',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_16',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列现象中，不能用光的直线传播解释的是（    ）',
+                    options: ['A. 日食', 'B. 月食', 'C. 小孔成像', 'D. 水中筷子弯折'],
+                    answer: 'D',
+                    analysis: '水中筷子弯折是光的折射现象，不能用光的直线传播解释。日食、月食、小孔成像都是光的直线传播形成的。',
+                    knowledge: '声音与光',
+                    difficulty: '中'
+                }
+            ],
+            10: [ // 热与温度
+                {
+                    id: '2023_滨江_11',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列物态变化中，属于放热过程的是（    ）',
+                    options: ['A. 冰融化成水', 'B. 湿衣服晾干', 'C. 水蒸气变成露珠', 'D. 干冰升华'],
+                    answer: 'C',
+                    analysis: '水蒸气变成露珠是液化过程，液化需要放热。冰融化、湿衣服晾干（蒸发）、干冰升华都是吸热过程。',
+                    knowledge: '热与温度',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_14',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '如图为某晶体熔化图像，下列说法正确的是（    ）',
+                    options: ['A. AB段表示固态，温度升高', 'B. BC段表示熔化过程，温度不变', 'C. CD段表示液态，温度升高', 'D. 以上说法都正确'],
+                    answer: 'D',
+                    analysis: '晶体熔化图像中，AB段固态升温，BC段熔化过程温度不变（熔点），CD段液态升温。三个说法都正确。',
+                    knowledge: '热与温度',
+                    difficulty: '中',
+                    image: '晶体熔化图像'
+                },
+                {
+                    id: '2023_钱塘_13',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列说法正确的是（    ）',
+                    options: ['A. 0℃的冰没有内能', 'B. 物体的温度越高，内能越大', 'C. 物体吸收热量，温度一定升高', 'D. 物体温度升高，一定吸收了热量'],
+                    answer: 'B',
+                    analysis: '物体的内能与温度有关，温度越高，分子运动越剧烈，内能越大。一切物体都有内能（A错）；晶体熔化时吸热但温度不变（C错）；温度升高可能是做功也可能是热传递（D错）。',
+                    knowledge: '热与温度',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_17',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列现象中，属于液化的是（    ）',
+                    options: ['A. 冬天玻璃窗上的冰花', 'B. 夏天从冰箱拿出的饮料瓶外壁出汗', 'C. 冬天冰冻的衣服变干', 'D. 樟脑丸变小'],
+                    answer: 'B',
+                    analysis: '饮料瓶外壁出汗是空气中的水蒸气遇冷液化成小水滴。冰花是凝华，冰冻衣服变干是升华，樟脑丸变小是升华。',
+                    knowledge: '热与温度',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_14',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '标准大气压下，水的沸点是（    ）',
+                    options: ['A. 80℃', 'B. 90℃', 'C. 100℃', 'D. 110℃'],
+                    answer: 'C',
+                    analysis: '标准大气压下，水的沸点是100℃。沸点与气压有关，气压越高沸点越高，气压越低沸点越低。',
+                    knowledge: '热与温度',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_16',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '下列关于蒸发的叙述，错误的是（    ）',
+                    options: ['A. 蒸发在任何温度下都能发生', 'B. 蒸发只在液体表面发生', 'C. 蒸发是汽化的一种形式', 'D. 蒸发需要放热'],
+                    answer: 'D',
+                    analysis: '蒸发是汽化的一种形式，需要吸热（不是放热）。蒸发在任何温度下都能发生，只在液体表面发生。',
+                    knowledge: '热与温度',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_12',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列现象中，属于凝华的是（    ）',
+                    options: ['A. 雾的形成', 'B. 露的形成', 'C. 霜的形成', 'D. 雨的形成'],
+                    answer: 'C',
+                    analysis: '霜是空气中的水蒸气直接变成固态冰晶，属于凝华（气态→固态）。雾和露是液化，雨主要是液化。',
+                    knowledge: '热与温度',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_17',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列关于温度计使用的叙述，正确的是（    ）',
+                    options: ['A. 可以用体温计测量沸水的温度', 'B. 读数时温度计可以离开被测液体', 'C. 温度计的玻璃泡要完全浸入被测液体中', 'D. 温度计可以碰容器底'],
+                    answer: 'C',
+                    analysis: '温度计使用时，玻璃泡要完全浸入被测液体中，不能碰容器底或壁。体温计量程35-42℃，不能测沸水。普通温度计读数时不能离开被测液体。',
+                    knowledge: '热与温度',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_14',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列关于热量的叙述，正确的是（    ）',
+                    options: ['A. 热量是物体含有的能量', 'B. 温度高的物体含有热量多', 'C. 物体吸收热量，内能一定增加', 'D. 热量是状态量'],
+                    answer: 'C',
+                    analysis: '物体吸收热量，如果不对外做功，内能一定增加。热量是过程量，不能说"含有热量"。内能大小与温度、质量、状态都有关。',
+                    knowledge: '热与温度',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_18',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '冬天，嘴里呼出的"白气"是（    ）',
+                    options: ['A. 水蒸气', 'B. 小水滴', 'C. 二氧化碳', 'D. 氧气'],
+                    answer: 'B',
+                    analysis: '"白气"不是水蒸气（水蒸气看不见），而是口中呼出的水蒸气遇冷液化形成的小水滴。',
+                    knowledge: '热与温度',
+                    difficulty: '易'
+                }
+            ],
+            11: [ // 工程类
+                {
+                    id: '2023_滨江_12',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '如图是某小组设计的塔台模型，下列做法能增加塔台稳定性的是（    ）',
+                    options: ['A. 增加塔台高度', 'B. 减少底座面积', 'C. 上小下大', 'D. 使用轻质材料做底座'],
+                    answer: 'C',
+                    analysis: '上小下大可以降低重心，增加支撑面，从而提高塔台的稳定性。增加高度、减少底座面积都会降低稳定性；底座应该重一些才能降低重心。',
+                    knowledge: '工程类',
+                    difficulty: '中',
+                    image: '塔台模型图'
+                },
+                {
+                    id: '2024_临平_15',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列结构中，最稳定的是（    ）',
+                    options: ['A. 四边形框架', 'B. 三角形框架', 'C. 圆形框架', 'D. 五边形框架'],
+                    answer: 'B',
+                    analysis: '三角形具有稳定性，不易变形，是最稳定的多边形结构。四边形、五边形容易变形，圆形虽然稳定但不如三角形在工程中使用广泛。',
+                    knowledge: '工程类',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_14',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '桥梁设计成拱形的主要目的是（    ）',
+                    options: ['A. 美观', 'B. 节省材料', 'C. 增加承重能力', 'D. 方便施工'],
+                    answer: 'C',
+                    analysis: '拱形结构能将压力向下向外传递给相邻部分，从而增加桥梁的承重能力。赵州桥就是典型的拱形桥，历经千年不倒。',
+                    knowledge: '工程类',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_18',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列关于增加结构稳定性的方法，错误的是（    ）',
+                    options: ['A. 降低重心', 'B. 增大支撑面', 'C. 使用三角形结构', 'D. 增加高度'],
+                    answer: 'D',
+                    analysis: '增加高度会提高重心，降低稳定性。降低重心、增大支撑面、使用三角形结构都是增加稳定性的有效方法。',
+                    knowledge: '工程类',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_15',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列关于不倒翁的原理，正确的是（    ）',
+                    options: ['A. 重心高', 'B. 上轻下重', 'C. 支撑面小', 'D. 质量小'],
+                    answer: 'B',
+                    analysis: '不倒翁上轻下重，重心低，所以倾斜后能自动恢复直立。这是利用降低重心增加稳定性的原理。',
+                    knowledge: '工程类',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_17',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '自行车架采用三角形结构，主要是为了（    ）',
+                    options: ['A. 美观', 'B. 节省材料', 'C. 增加稳定性', 'D. 减轻重量'],
+                    answer: 'C',
+                    analysis: '三角形结构具有稳定性，不易变形。自行车架采用三角形结构主要是为了增加稳定性，保证骑行安全。',
+                    knowledge: '工程类',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_13',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列关于房屋结构的叙述，正确的是（    ）',
+                    options: ['A. 墙体承重结构比框架结构更牢固', 'B. 框架结构比墙体承重结构更灵活', 'C. 三角形屋顶只是为了美观', 'D. 地基越深越不稳固'],
+                    answer: 'B',
+                    analysis: '框架结构比墙体承重结构更灵活，空间布置更自由。三角形屋顶利用三角形稳定性，既美观又牢固。地基越深越稳固。',
+                    knowledge: '工程类',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_19',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列关于材料选择的叙述，错误的是（    ）',
+                    options: ['A. 钢材比木材承重能力强', 'B. 塑料比金属耐腐蚀', 'C. 玻璃比塑料韧性好', 'D. 混凝土比砖块更坚固'],
+                    answer: 'C',
+                    analysis: '玻璃脆性大，韧性差，容易破碎。塑料韧性比玻璃好。钢材承重能力强，塑料耐腐蚀，混凝土比砖块坚固都是正确的。',
+                    knowledge: '工程类',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_临安_15',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '设计塔台时，下列因素不需要考虑的是（    ）',
+                    options: ['A. 稳定性', 'B. 高度', 'C. 颜色', 'D. 承重能力'],
+                    answer: 'C',
+                    analysis: '设计塔台需要考虑稳定性、高度、承重能力等功能性因素。颜色属于美观因素，不是工程设计的主要考虑因素。',
+                    knowledge: '工程类',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_19',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列关于工程设计的叙述，正确的是（    ）',
+                    options: ['A. 工程设计只需要考虑功能', 'B. 工程设计需要考虑成本', 'C. 工程设计不需要测试', 'D. 工程设计只需要一个人完成'],
+                    answer: 'B',
+                    analysis: '工程设计需要综合考虑功能、成本、安全性、美观性、环保性等多个因素。设计完成后需要测试验证，通常需要团队协作。',
+                    knowledge: '工程类',
+                    difficulty: '易'
+                }
+            ],
+            12: [ // 科学测量与实验
+                {
+                    id: '2023_滨江_13',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '用刻度尺测量物体长度时，下列做法正确的是（    ）',
+                    options: ['A. 刻度尺放歪斜', 'B. 视线斜视读数', 'C. 从零刻度线开始测量', 'D. 读数时不估读'],
+                    answer: 'C',
+                    analysis: '测量时应将刻度尺放正，视线垂直刻度线，从零刻度线或整刻度线开始测量，读数要估读到分度值下一位。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_16',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '在探究"影响种子发芽因素"的实验中，下列做法正确的是（    ）',
+                    options: ['A. 同时改变温度和水分', 'B. 只改变温度，保持水分相同', 'C. 不设置对照组', 'D. 只用一粒种子做实验'],
+                    answer: 'B',
+                    analysis: '科学实验要用控制变量法，只改变一个因素（温度），保持其他因素（水分、空气等）相同。同时改变多个因素无法判断哪个因素影响结果；要设置对照组；要用多粒种子避免偶然性。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_钱塘_15',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '关于误差，下列说法正确的是（    ）',
+                    options: ['A. 误差就是错误，可以避免', 'B. 多次测量可以消除误差', 'C. 误差只能减小，不能消除', 'D. 精密仪器没有误差'],
+                    answer: 'C',
+                    analysis: '误差是测量值与真实值的差异，不可避免，只能减小。错误可以避免，误差不能消除。多次测量取平均值可以减小误差，但不能消除。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_20',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '使用天平测量物体质量时，砝码应该用（    ）夹取',
+                    options: ['A. 手', 'B. 镊子', 'C. 磁铁', 'D. 钳子'],
+                    answer: 'B',
+                    analysis: '砝码必须用镊子夹取，不能用手直接拿，因为手上的汗液会腐蚀砝码，影响测量精度。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_16',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列关于量筒使用的叙述，正确的是（    ）',
+                    options: ['A. 量筒可以加热', 'B. 读数时视线应与凹液面最低处平齐', 'C. 量筒可以溶解物质', 'D. 量筒可以用作反应容器'],
+                    answer: 'B',
+                    analysis: '量筒读数时视线应与凹液面最低处平齐。量筒不能加热、不能溶解物质、不能用作反应容器，只能量取液体体积。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_18',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '科学实验的基本步骤，正确的顺序是（    ）',
+                    options: ['A. 提出问题→制定计划→作出假设→搜集证据→处理信息→表达交流', 'B. 提出问题→作出假设→制定计划→搜集证据→处理信息→表达交流', 'C. 制定计划→提出问题→作出假设→搜集证据→处理信息→表达交流', 'D. 提出问题→作出假设→搜集证据→制定计划→处理信息→表达交流'],
+                    answer: 'B',
+                    analysis: '科学实验的基本步骤：提出问题→作出假设→制定计划→搜集证据→处理信息→表达交流。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_14',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列关于控制变量法的叙述，错误的是（    ）',
+                    options: ['A. 只改变一个因素', 'B. 保持其他因素不变', 'C. 可以同时改变多个因素', 'D. 目的是研究该因素与结果的关系'],
+                    answer: 'C',
+                    analysis: '控制变量法要求只改变一个因素，保持其他因素不变，这样才能准确研究该因素与结果的关系。同时改变多个因素无法判断因果关系。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_20',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列关于多次测量取平均值的叙述，正确的是（    ）',
+                    options: ['A. 可以消除误差', 'B. 可以减小误差', 'C. 可以消除错误', 'D. 可以减小错误'],
+                    answer: 'B',
+                    analysis: '多次测量取平均值可以减小误差（特别是偶然误差），但不能消除误差，也不能消除或减小错误。错误应该通过规范操作来避免。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_钱塘_16',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '使用温度计测量液体温度时，下列做法错误的是（    ）',
+                    options: ['A. 温度计的玻璃泡完全浸入液体中', 'B. 温度计的玻璃泡碰容器底', 'C. 读数时玻璃泡继续留在液体中', 'D. 读数时视线与液柱上表面平齐'],
+                    answer: 'B',
+                    analysis: '温度计使用时，玻璃泡不能碰容器底或壁，因为容器底壁温度可能与液体温度不同。玻璃泡要完全浸入液体，读数时继续留在液体中，视线与液柱上表面平齐。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_临平_21',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列关于实验数据处理的叙述，正确的是（    ）',
+                    options: ['A. 数据可以随便修改', 'B. 异常数据应该直接删除', 'C. 数据可以用图表展示', 'D. 不需要记录实验数据'],
+                    answer: 'C',
+                    analysis: '实验数据可以用图表（如折线图、柱状图）展示，更直观。数据不能随便修改，异常数据要分析原因，实验必须记录数据。',
+                    knowledge: '科学测量与实验',
+                    difficulty: '易'
+                }
+            ],
+            13: [ // 细胞/显微镜/遗传
+                {
+                    id: '2023_滨江_14',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列结构中，植物细胞有而动物细胞没有的是（    ）',
+                    options: ['A. 细胞膜', 'B. 细胞核', 'C. 细胞壁', 'D. 细胞质'],
+                    answer: 'C',
+                    analysis: '细胞壁是植物细胞特有的结构，动物细胞没有。细胞膜、细胞核、细胞质是动植物细胞共有的。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_临平_17',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '显微镜的目镜是10×，物镜是40×，放大倍数是（    ）',
+                    options: ['A. 40倍', 'B. 50倍', 'C. 400倍', 'D. 4000倍'],
+                    answer: 'C',
+                    analysis: '显微镜放大倍数=目镜倍数×物镜倍数=10×40=400倍。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_16',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '关于遗传和变异，下列说法正确的是（    ）',
+                    options: ['A. 遗传是普遍的，变异不是普遍的', 'B. 遗传和变异都是普遍的', 'C. 变异都是有利的', 'D. 遗传物质只存在于细胞核中'],
+                    answer: 'B',
+                    analysis: '遗传和变异都是生物界普遍存在的现象。变异不一定有利；遗传物质主要存在于细胞核中，但细胞质中的线粒体、叶绿体也有少量DNA。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_萧山_21',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '使用显微镜观察时，应先使用（    ）',
+                    options: ['A. 高倍物镜', 'B. 低倍物镜', 'C. 油镜', 'D. 任意倍数'],
+                    answer: 'B',
+                    analysis: '使用显微镜观察时，应先使用低倍物镜，因为低倍镜视野大、亮度高，容易找到观察目标。找到目标后再换高倍镜观察细节。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_17',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列关于细胞核的叙述，正确的是（    ）',
+                    options: ['A. 细胞核是细胞的控制中心', 'B. 所有细胞都有细胞核', 'C. 细胞核只含有DNA', 'D. 细胞核是细胞呼吸的场所'],
+                    answer: 'A',
+                    analysis: '细胞核是细胞的控制中心，含有遗传物质。不是所有细胞都有细胞核（如成熟红细胞没有）；细胞核含有DNA和蛋白质；细胞呼吸的场所是线粒体。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_上城_19',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '下列关于DNA的叙述，错误的是（    ）',
+                    options: ['A. DNA是遗传物质', 'B. DNA是双螺旋结构', 'C. DNA只存在于细胞核中', 'D. DNA含有遗传信息'],
+                    answer: 'C',
+                    analysis: 'DNA主要存在于细胞核中，但细胞质中的线粒体、叶绿体也有少量DNA。DNA是遗传物质，双螺旋结构，含有遗传信息。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_滨江_15',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '显微镜调焦时，下列做法正确的是（    ）',
+                    options: ['A. 先升后降', 'B. 先降后升', 'C. 只升不降', 'D. 只降不升'],
+                    answer: 'B',
+                    analysis: '显微镜调焦时，应先降后升：先降低镜筒（眼睛从侧面看物镜，避免压碎玻片），然后左眼注视目镜，缓慢上升镜筒，直到看清物像。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_22',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列关于细胞分裂的叙述，正确的是（    ）',
+                    options: ['A. 细胞分裂使细胞体积增大', 'B. 细胞分裂使细胞数目增多', 'C. 细胞分裂使细胞分化', 'D. 细胞分裂使细胞衰老'],
+                    answer: 'B',
+                    analysis: '细胞分裂使细胞数目增多。细胞生长使细胞体积增大。细胞分化形成不同组织。细胞衰老是细胞生命活动的自然过程。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_17',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列关于变异的叙述，正确的是（    ）',
+                    options: ['A. 变异都是有害的', 'B. 变异都是有益的', 'C. 变异分为有利变异和不利变异', 'D. 变异不能遗传'],
+                    answer: 'C',
+                    analysis: '变异分为有利变异、不利变异和中性变异。可遗传变异是遗传物质改变引起的，可以遗传给后代。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_22',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列关于显微镜使用的叙述，错误的是（    ）',
+                    options: ['A. 取镜时右手握镜臂，左手托镜座', 'B. 对光时低倍物镜对准通光孔', 'C. 观察时先用高倍镜找到目标', 'D. 收镜时把物镜转到两旁'],
+                    answer: 'C',
+                    analysis: '观察时应先用低倍镜找到目标，因为低倍镜视野大。找到目标后再换高倍镜观察细节。A、B、D都是正确的操作。',
+                    knowledge: '细胞/显微镜/遗传',
+                    difficulty: '易'
+                }
+            ],
+            14: [ // 初一科学衔接
+                {
+                    id: '2023_滨江_15',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '一块金属的质量是54g，体积是20cm³，它的密度是（    ）',
+                    options: ['A. 2.7g/cm³', 'B. 0.37g/cm³', 'C. 1080g/cm³', 'D. 2.7kg/m³'],
+                    answer: 'A',
+                    analysis: '密度ρ=m/V=54g/20cm³=2.7g/cm³。注意单位要统一，这里是g和cm³，所以结果是g/cm³。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_18',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '计算题',
+                    question: '一辆汽车以72km/h的速度行驶，通过一座长1800m的大桥需要多少时间？',
+                    options: ['A. 25s', 'B. 90s', 'C. 129.6s', 'D. 1800s'],
+                    answer: 'B',
+                    analysis: '首先统一单位：72km/h=20m/s。时间t=s/v=1800m÷20m/s=90s。注意速度单位换算：1m/s=3.6km/h。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '中'
+                },
+                {
+                    id: '2023_钱塘_17',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '关于密度，下列说法正确的是（    ）',
+                    options: ['A. 密度与质量成正比，与体积成反比', 'B. 同种物质，密度一定相同', 'C. 不同物质，密度一定不同', 'D. 密度是物质特性，与质量体积无关'],
+                    answer: 'D',
+                    analysis: '密度是物质的特性，与质量、体积无关，只与物质种类和状态有关。同种物质状态不同密度也不同（如冰和水）；不同物质密度可能相同（如酒精和煤油）。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_23',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '1m/s等于（    ）km/h',
+                    options: ['A. 0.2778', 'B. 3.6', 'C. 10', 'D. 100'],
+                    answer: 'B',
+                    analysis: '1m/s=3.6km/h。换算方法：1m/s=0.001km/(1/3600)h=3.6km/h。记住：m/s→km/h乘以3.6；km/h→m/s除以3.6。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_18',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列关于速度单位的叙述，正确的是（    ）',
+                    options: ['A. 72km/h=20m/s', 'B. 36km/h=10m/s', 'C. 54km/h=15m/s', 'D. 以上都正确'],
+                    answer: 'D',
+                    analysis: '72km/h=72÷3.6=20m/s；36km/h=36÷3.6=10m/s；54km/h=54÷3.6=15m/s。三个换算都正确。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_20',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '水的密度是1.0×10³kg/m³，表示的意思是（    ）',
+                    options: ['A. 1m³水的质量是1.0×10³kg', 'B. 1kg水的体积是1.0×10³m³', 'C. 水的质量是1000kg', 'D. 水的体积是1m³'],
+                    answer: 'A',
+                    analysis: '密度1.0×10³kg/m³表示1立方米水的质量是1000kg。密度是质量与体积的比值，不是单纯的质量或体积。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_16',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列关于压强的叙述，正确的是（    ）',
+                    options: ['A. 压力越大，压强一定越大', 'B. 受力面积越大，压强一定越大', 'C. 压强与压力和受力面积都有关', 'D. 压强只与受力面积有关'],
+                    answer: 'C',
+                    analysis: '压强p=F/S，与压力和受力面积都有关。增大压强：增大压力或减小受力面积。减小压强：减小压力或增大受力面积。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_23',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '下列做法中，属于增大压强的是（    ）',
+                    options: ['A. 书包带做得宽', 'B. 坦克装有履带', 'C. 刀刃磨得很薄', 'D. 铁路铺在枕木上'],
+                    answer: 'C',
+                    analysis: '刀刃磨得很薄是减小受力面积，增大压强。书包带做宽、坦克履带、铁路枕木都是增大受力面积，减小压强。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_18',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '下列关于浮力的叙述，正确的是（    ）',
+                    options: ['A. 浮力方向竖直向下', 'B. 浮力大小与物体密度有关', 'C. 浮力大小等于排开液体的重力', 'D. 沉底的物体不受浮力'],
+                    answer: 'C',
+                    analysis: '阿基米德原理：浮力大小等于排开液体的重力（F浮=ρ液gV排）。浮力方向竖直向上。浮力大小与液体密度和排开液体体积有关。沉底的物体也受浮力，只是浮力小于重力。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '中'
+                },
+                {
+                    id: '2024_临平_24',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '一个物体在空气中称重为10N，浸没在水中称重为6N，它受到的浮力是（    ）',
+                    options: ['A. 10N', 'B. 6N', 'C. 4N', 'D. 16N'],
+                    answer: 'C',
+                    analysis: '浮力=空气中的重力-液体中的重力=10N-6N=4N。这是称重法测浮力。',
+                    knowledge: '初一科学衔接',
+                    difficulty: '中'
+                }
+            ],
+            15: [ // 综合模拟测试
+                {
+                    id: '2023_滨江_综合01',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列变化属于化学变化的是（    ）',
+                    options: ['A. 冰融化', 'B. 铁生锈', 'C. 酒精挥发', 'D. 玻璃破碎'],
+                    answer: 'B',
+                    analysis: '铁生锈有新物质（氧化铁）生成，属于化学变化。冰融化、酒精挥发、玻璃破碎都是物理变化。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_综合02',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '太阳系中，体积最大的行星是（    ）',
+                    options: ['A. 地球', 'B. 木星', 'C. 土星', 'D. 火星'],
+                    answer: 'B',
+                    analysis: '木星是太阳系中体积最大的行星，也是质量最大的行星。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_综合03',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '地球公转产生的现象是（    ）',
+                    options: ['A. 昼夜交替', 'B. 四季变化', 'C. 日月星辰东升西落', 'D. 时差'],
+                    answer: 'B',
+                    analysis: '四季变化是地球公转产生的。昼夜交替、日月星辰东升西落、时差是地球自转产生的。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_临平_综合04',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '植物体内运输有机物的结构是（    ）',
+                    options: ['A. 导管', 'B. 筛管', 'C. 气孔', 'D. 根毛'],
+                    answer: 'B',
+                    analysis: '筛管运输有机物，位于韧皮部，方向自上而下。导管运输水和无机盐。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_综合05',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列动物中，属于完全变态发育的是（    ）',
+                    options: ['A. 蝗虫', 'B. 蟋蟀', 'C. 蝴蝶', 'D. 螳螂'],
+                    answer: 'C',
+                    analysis: '蝴蝶的发育经过卵→幼虫→蛹→成虫四个阶段，属于完全变态发育。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_综合06',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '人体消化和吸收的主要场所是（    ）',
+                    options: ['A. 口腔', 'B. 胃', 'C. 小肠', 'D. 大肠'],
+                    answer: 'C',
+                    analysis: '小肠长约5-6米，内有环形皱襞和小肠绒毛，是消化和吸收的主要场所。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_综合07',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '下列措施中，属于减小摩擦的是（    ）',
+                    options: ['A. 轮胎上有花纹', 'B. 给机器加润滑油', 'C. 鞋底有花纹', 'D. 用砂纸打磨'],
+                    answer: 'B',
+                    analysis: '加润滑油可以减小摩擦。轮胎花纹、鞋底花纹、砂纸打磨都是增大摩擦。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_综合08',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '家庭电路中，各用电器的连接方式是（    ）',
+                    options: ['A. 串联', 'B. 并联', 'C. 混联', 'D. 无法判断'],
+                    answer: 'B',
+                    analysis: '家庭电路中各用电器并联，因为并联时各用电器互不影响，可以独立工作。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_钱塘_综合09',
+                    year: '2023',
+                    district: '钱塘区',
+                    type: '单选题',
+                    question: '光从空气斜射入水中时，传播方向发生改变，这是（    ）',
+                    options: ['A. 反射', 'B. 折射', 'C. 直线传播', 'D. 色散'],
+                    answer: 'B',
+                    analysis: '光从一种介质进入另一种介质时传播方向改变，属于折射。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_临平_综合10',
+                    year: '2024',
+                    district: '临平区',
+                    type: '单选题',
+                    question: '下列物态变化中，属于吸热过程的是（    ）',
+                    options: ['A. 水结冰', 'B. 霜的形成', 'C. 冰融化', 'D. 雾的形成'],
+                    answer: 'C',
+                    analysis: '冰融化是熔化过程，需要吸热。水结冰、霜的形成、雾的形成都是放热过程。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_综合11',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '增加塔台稳定性的有效方法是（    ）',
+                    options: ['A. 增加高度', 'B. 上小下大', 'C. 减少底座', 'D. 使用轻质材料'],
+                    answer: 'B',
+                    analysis: '上小下大可以降低重心，增加稳定性。增加高度、减少底座会降低稳定性。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_上城_综合12',
+                    year: '2024',
+                    district: '上城区',
+                    type: '单选题',
+                    question: '用显微镜观察时，应先使用（    ）',
+                    options: ['A. 高倍物镜', 'B. 低倍物镜', 'C. 油镜', 'D. 任意倍数'],
+                    answer: 'B',
+                    analysis: '先用低倍物镜找到目标，因为低倍镜视野大。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_临安_综合13',
+                    year: '2023',
+                    district: '临安区',
+                    type: '单选题',
+                    question: '关于误差，下列说法正确的是（    ）',
+                    options: ['A. 误差可以避免', 'B. 误差就是错误', 'C. 误差只能减小不能消除', 'D. 精密仪器没有误差'],
+                    answer: 'C',
+                    analysis: '误差是测量值与真实值的差异，不可避免，只能减小。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2024_萧山_综合14',
+                    year: '2024',
+                    district: '萧山区',
+                    type: '单选题',
+                    question: '水的密度是1.0×10³kg/m³，表示的意思是（    ）',
+                    options: ['A. 1m³水的质量是1.0×10³kg', 'B. 1kg水的体积是1.0×10³m³', 'C. 水的质量是1000kg', 'D. 水的体积是1m³'],
+                    answer: 'A',
+                    analysis: '密度表示单位体积的质量。1.0×10³kg/m³表示1立方米水的质量是1000kg。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                },
+                {
+                    id: '2023_滨江_综合15',
+                    year: '2023',
+                    district: '滨江区',
+                    type: '单选题',
+                    question: '下列说法正确的是（    ）',
+                    options: ['A. 声音可以在真空中传播', 'B. 光不能在真空中传播', 'C. 声音和光都可以传递信息', 'D. 声音和光传播速度相同'],
+                    answer: 'C',
+                    analysis: '声音和光都可以传递信息。声音不能在真空中传播，光可以，光速远大于声速。',
+                    knowledge: '综合',
+                    difficulty: '易'
+                }
+            ]
+        };
+
+        // ===== 状态管理 =====
+        let state = {
+            currentLevel: 1,
+            currentQuestion: 0,
+            answers: [],
+            wrongQuestions: [],
+            favorites: [],
+            timer: null,
+            timeLeft: 0,
+            isPaused: false,
+            selectedOption: null
+        };
+
+        // 从localStorage加载进度
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const data = JSON.parse(saved);
+                state.wrongQuestions = data.wrongQuestions || [];
+                state.favorites = data.favorites || [];
+                return data.levels || {};
+            }
+            return {};
+        }
+
+        // 保存进度到localStorage
+        function saveProgress() {
+            const levels = {};
+            document.querySelectorAll('.level-node').forEach(node => {
+                const id = parseInt(node.dataset.id);
+                levels[id] = {
+                    completed: node.classList.contains('completed'),
+                    stars: parseInt(node.dataset.stars) || 0
+                };
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                levels,
+                wrongQuestions: state.wrongQuestions,
+                favorites: state.favorites
+            }));
+        }
+
+        // ===== 页面切换 =====
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            // 更新底部导航
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (pageId === 'pageMap') {
+                document.querySelector('.nav-item:nth-child(1)').classList.add('active');
+                document.getElementById('backBtn').classList.add('hidden');
+                document.getElementById('headerText').textContent = '科学闯关';
+                renderMap();
+            } else if (pageId === 'pageWrongBook') {
+                document.querySelector('.nav-item:nth-child(2)').classList.add('active');
+                document.getElementById('backBtn').classList.remove('hidden');
+                document.getElementById('headerText').textContent = '错题本';
+                renderWrongBook();
+            } else if (pageId === 'pageQuiz') {
+                document.getElementById('backBtn').classList.remove('hidden');
+                document.getElementById('headerText').textContent = `第${state.currentLevel}关`;
+            } else if (pageId === 'pageResult') {
+                document.getElementById('backBtn').classList.remove('hidden');
+                document.getElementById('headerText').textContent = '闯关结果';
+            } else if (pageId === 'pageIntro') {
+                document.getElementById('backBtn').classList.remove('hidden');
+                document.getElementById('headerText').textContent = '准备闯关';
+            }
+        }
+
+        function goBack() {
+            const activePage = document.querySelector('.page.active');
+            if (activePage.id === 'pageQuiz' || activePage.id === 'pageResult' || activePage.id === 'pageIntro') {
+                showPage('pageMap');
+            } else if (activePage.id === 'pageWrongBook') {
+                showPage('pageMap');
+            }
+        }
+
+        // ===== 渲染闯关地图 =====
+        function renderMap() {
+            const levels = loadProgress();
+            const grid = document.getElementById('levelsGrid');
+            grid.innerHTML = '';
+            
+            let completed = 0;
+            let totalStars = 0;
+            
+            LEVELS.forEach((level, index) => {
+                const levelData = levels[level.id] || { completed: false, stars: 0 };
+                if (levelData.completed) {
+                    completed++;
+                    totalStars += levelData.stars;
+                }
+                
+                const isLocked = index > 0 && !levels[LEVELS[index-1].id]?.completed;
+                const isCurrent = !isLocked && !levelData.completed;
+                const isCompleted = levelData.completed;
+                
+                const node = document.createElement('div');
+                node.className = 'level-node';
+                node.dataset.id = level.id;
+                node.dataset.stars = levelData.stars;
+                if (isLocked) node.classList.add('locked');
+                if (isCurrent) node.classList.add('current');
+                if (isCompleted) node.classList.add('completed');
+                
+                let starsHtml = '';
+                for (let i = 1; i <= 3; i++) {
+                    starsHtml += `<span class="star ${i <= levelData.stars ? 'filled' : ''}">⭐</span>`;
+                }
+                
+                node.innerHTML = `
+                    <div class="level-icon ${isLocked ? 'locked' : isCompleted ? 'completed' : 'current'}">
+                        ${isLocked ? '🔒' : level.icon}
+                        ${isLocked ? '<div class="level-lock">🔒</div>' : ''}
+                    </div>
+                    <div class="level-name">${level.name.replace('\n', '<br>')}</div>
+                    <div class="level-stars">${starsHtml}</div>
+                    <div class="level-status">${isLocked ? '未解锁' : isCompleted ? '已完成' : '进行中'}</div>
+                `;
+                
+                if (!isLocked) {
+                    node.onclick = () => showIntro(level.id);
+                }
+                
+                grid.appendChild(node);
+            });
+            
+            // 更新进度
+            document.getElementById('progressText').textContent = `已完成 ${completed}/15 关`;
+            document.getElementById('progressFill').style.width = `${(completed/15)*100}%`;
+            document.getElementById('statCompleted').textContent = completed;
+            document.getElementById('statStars').textContent = totalStars;
+            document.getElementById('statWrong').textContent = state.wrongQuestions.length;
+        }
+
+        // ===== 知识点提示页 =====
+        function showIntro(levelId) {
+            state.currentLevel = levelId;
+            const level = LEVELS[levelId - 1];
+            
+            document.getElementById('introLevel').textContent = `第 ${levelId} 关`;
+            document.getElementById('introTitle').textContent = level.name.replace('\n', ' - ');
+            document.getElementById('introTopics').innerHTML = level.topics.map(t => `• ${t}`).join('<br>');
+            document.getElementById('introQuestionCount').textContent = level.questionCount;
+            document.getElementById('introTime').textContent = level.time;
+            
+            showPage('pageIntro');
+        }
+
+        // ===== 开始闯关 =====
+        function startQuiz() {
+            state.currentQuestion = 0;
+            state.answers = [];
+            state.selectedOption = null;
+            state.isPaused = false;
+            
+            const level = LEVELS[state.currentLevel - 1];
+            state.timeLeft = level.time * 60;
+            
+            showPage('pageQuiz');
+            renderQuestion();
+            startTimer();
+        }
+
+        // ===== 渲染题目 =====
+        function renderQuestion() {
+            const questions = QUESTIONS[state.currentLevel];
+            const q = questions[state.currentQuestion];
+            
+            document.getElementById('currentQuestion').textContent = state.currentQuestion + 1;
+            document.getElementById('totalQuestions').textContent = questions.length;
+            document.getElementById('questionNumber').textContent = state.currentQuestion + 1;
+            document.getElementById('questionType').textContent = q.type;
+            document.getElementById('questionText').textContent = q.question;
+            
+            // 图片占位符
+            const imgDiv = document.getElementById('questionImage');
+            if (q.image) {
+                imgDiv.style.display = 'block';
+                imgDiv.textContent = `[图片：${q.image}]`;
+            } else {
+                imgDiv.style.display = 'none';
+            }
+            
+            // 选项
+            const optionsList = document.getElementById('optionsList');
+            optionsList.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.innerHTML = `
+                    <div class="option-marker">${String.fromCharCode(65 + idx)}</div>
+                    <div>${opt}</div>
+                `;
+                div.onclick = () => selectOption(idx);
+                optionsList.appendChild(div);
+            });
+            
+            // 重置解析区域
+            document.getElementById('analysisSection').classList.remove('show');
+            document.getElementById('submitBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            
+            // 添加动画
+            document.getElementById('questionCard').classList.remove('fade-in');
+            void document.getElementById('questionCard').offsetWidth;
+            document.getElementById('questionCard').classList.add('fade-in');
+        }
+
+        // ===== 选择选项 =====
+        function selectOption(idx) {
+            if (state.selectedOption !== null) return;
+            
+            state.selectedOption = idx;
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === idx) opt.classList.add('selected');
+            });
+        }
+
+        // ===== 提交答案 =====
+        function submitAnswer() {
+            if (state.selectedOption === null) {
+                alert('请先选择一个答案！');
+                return;
+            }
+            
+            const questions = QUESTIONS[state.currentLevel];
+            const q = questions[state.currentQuestion];
+            const isCorrect = q.options[state.selectedOption].startsWith(q.answer);
+            
+            state.answers.push({
+                question: q,
+                selected: state.selectedOption,
+                correct: isCorrect
+            });
+            
+            // 显示对错
+            const options = document.querySelectorAll('.option');
+            const correctIdx = q.options.findIndex(opt => opt.startsWith(q.answer));
+            
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === correctIdx) {
+                    opt.classList.add('correct');
+                } else if (i === state.selectedOption && !isCorrect) {
+                    opt.classList.add('wrong');
+                    opt.classList.add('shake');
+                    // 记录错题
+                    if (!state.wrongQuestions.find(w => w.id === q.id)) {
+                        state.wrongQuestions.push({...q, wrongCount: 1});
+                    } else {
+                        const w = state.wrongQuestions.find(w => w.id === q.id);
+                        w.wrongCount = (w.wrongCount || 1) + 1;
+                    }
+                }
+            });
+            
+            // 显示解析
+            const analysisSection = document.getElementById('analysisSection');
+            analysisSection.classList.add('show');
+            
+            const analysisIcon = document.getElementById('analysisIcon');
+            const analysisTitle = document.getElementById('analysisTitle');
+            analysisIcon.textContent = isCorrect ? '✓' : '✗';
+            analysisIcon.className = 'analysis-icon ' + (isCorrect ? 'correct' : 'wrong');
+            analysisTitle.textContent = isCorrect ? '回答正确！' : '回答错误';
+            analysisTitle.className = 'analysis-title ' + (isCorrect ? 'correct' : 'wrong');
+            
+            document.getElementById('analysisContent').textContent = q.analysis;
+            document.getElementById('analysisSource').textContent = `真题来源：${q.year}年${q.district}第${q.id.split('_').pop()}题`;
+            
+            // 收藏按钮状态
+            const favBtn = document.getElementById('favoriteBtn');
+            const isFav = state.favorites.includes(q.id);
+            favBtn.classList.toggle('active', isFav);
+            favBtn.textContent = isFav ? '⭐ 已收藏' : '⭐ 收藏错题';
+            
+            // 切换按钮
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+            
+            if (!isCorrect) {
+                saveProgress();
+            }
+        }
+
+        // ===== 下一题 =====
+        function nextQuestion() {
+            state.selectedOption = null;
+            state.currentQuestion++;
+            
+            const questions = QUESTIONS[state.currentLevel];
+            if (state.currentQuestion >= questions.length) {
+                showResult();
+            } else {
+                renderQuestion();
+            }
+        }
+
+        // ===== 收藏/取消收藏 =====
+        function toggleFavorite() {
+            const questions = QUESTIONS[state.currentLevel];
+            const q = questions[state.currentQuestion];
+            const idx = state.favorites.indexOf(q.id);
+            
+            if (idx === -1) {
+                state.favorites.push(q.id);
+            } else {
+                state.favorites.splice(idx, 1);
+            }
+            
+            const favBtn = document.getElementById('favoriteBtn');
+            const isFav = idx === -1;
+            favBtn.classList.toggle('active', isFav);
+            favBtn.textContent = isFav ? '⭐ 已收藏' : '⭐ 收藏错题';
+            
+            saveProgress();
+        }
+
+        // ===== 计时器 =====
+        function startTimer() {
+            if (state.timer) clearInterval(state.timer);
+            
+            state.timer = setInterval(() => {
+                if (state.isPaused) return;
+                
+                state.timeLeft--;
+                const mins = Math.floor(state.timeLeft / 60);
+                const secs = state.timeLeft % 60;
+                document.getElementById('timerText').textContent = 
+                    `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                // 时间警告
+                const timerEl = document.getElementById('timer');
+                if (state.timeLeft <= 60) {
+                    timerEl.classList.add('warning');
+                } else {
+                    timerEl.classList.remove('warning');
+                }
+                
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timer);
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        // ===== 暂停/继续 =====
+        function pauseQuiz() {
+            state.isPaused = true;
+            document.getElementById('pauseModal').classList.add('show');
+        }
+
+        function resumeQuiz() {
+            state.isPaused = false;
+            document.getElementById('pauseModal').classList.remove('show');
+        }
+
+        function quitQuiz() {
+            clearInterval(state.timer);
+            document.getElementById('pauseModal').classList.remove('show');
+            showPage('pageMap');
+        }
+
+        // ===== 显示结果 =====
+        function showResult() {
+            clearInterval(state.timer);
+            
+            const questions = QUESTIONS[state.currentLevel];
+            const correct = state.answers.filter(a => a.correct).length;
+            const wrong = questions.length - correct;
+            const score = Math.round((correct / questions.length) * 100);
+            
+            // 计算星级
+            let stars = 1;
+            if (wrong === 0) stars = 3;
+            else if (wrong <= 2) stars = 2;
+            
+            // 计算用时
+            const level = LEVELS[state.currentLevel - 1];
+            const used = level.time * 60 - state.timeLeft;
+            const mins = Math.floor(used / 60);
+            const secs = used % 60;
+            
+            // 更新结果页
+            document.getElementById('resultScore').textContent = score;
+            document.getElementById('resultCorrect').textContent = correct;
+            document.getElementById('resultTime').textContent = 
+                `${mins}:${secs.toString().padStart(2, '0')}`;
+            
+            // 星级动画
+            const starsEl = document.getElementById('resultStars');
+            starsEl.innerHTML = '';
+            for (let i = 1; i <= 3; i++) {
+                const star = document.createElement('span');
+                star.className = 'result-star' + (i <= stars ? ' filled' : '');
+                star.textContent = '⭐';
+                if (i <= stars) {
+                    setTimeout(() => star.classList.add('animate'), i * 200);
+                }
+                starsEl.appendChild(star);
+            }
+            
+            // 徽章
+            const badge = document.getElementById('resultBadge');
+            badge.className = 'result-badge star-' + stars;
+            badge.textContent = stars === 3 ? '🏆' : stars === 2 ? '🥈' : '🥉';
+            
+            // 标题和副标题
+            const titles = {
+                3: { title: '完美通关！', subtitle: '太棒了，全部答对！' },
+                2: { title: '恭喜通关！', subtitle: '表现不错，继续加油！' },
+                1: { title: '闯关完成', subtitle: '还有进步空间，再接再厉！' }
+            };
+            document.getElementById('resultTitle').textContent = titles[stars].title;
+            document.getElementById('resultSubtitle').textContent = titles[stars].subtitle;
+            
+            // 错题回顾
+            const wrongList = document.getElementById('wrongList');
+            const wrongContent = document.getElementById('wrongListContent');
+            const wrongAnswers = state.answers.filter(a => !a.correct);
+            
+            if (wrongAnswers.length > 0) {
+                wrongList.style.display = 'block';
+                wrongContent.innerHTML = '';
+                wrongAnswers.forEach((a, idx) => {
+                    const item = document.createElement('div');
+                    item.className = 'wrong-item';
+                    item.innerHTML = `
+                        <div class="wrong-item-text">${idx + 1}. ${a.question.question.substring(0, 40)}...</div>
+                        <div class="wrong-item-tag">${a.question.knowledge}</div>
+                    `;
+                    item.onclick = () => {
+                        // 可以查看详细解析
+                        alert(`题目：${a.question.question}\n\n正确答案：${a.question.answer}\n\n解析：${a.question.analysis}`);
+                    };
+                    wrongContent.appendChild(item);
+                });
+            } else {
+                wrongList.style.display = 'none';
+            }
+            
+            // 保存关卡进度
+            const levels = loadProgress();
+            levels[state.currentLevel] = { completed: true, stars };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                levels,
+                wrongQuestions: state.wrongQuestions,
+                favorites: state.favorites
+            }));
+            
+            showPage('pageResult');
+        }
+
+        // ===== 下一关 =====
+        function nextLevel() {
+            if (state.currentLevel < 15) {
+                showIntro(state.currentLevel + 1);
+            } else {
+                showPage('pageMap');
+            }
+        }
+
+        // ===== 错题本 =====
+        function renderWrongBook() {
+            const wrongList = document.getElementById('wrongList');
+            const emptyDiv = document.getElementById('wrongEmpty');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            // 统计
+            const total = state.wrongQuestions.length;
+            const mastered = state.wrongQuestions.filter(w => (w.wrongCount || 1) >= 3).length;
+            const pending = total - mastered;
+            
+            document.getElementById('wrongTotal').textContent = total;
+            document.getElementById('wrongMastered').textContent = mastered;
+            document.getElementById('wrongPending').textContent = pending;
+            
+            if (total === 0) {
+                wrongList.style.display = 'none';
+                emptyDiv.style.display = 'block';
+                return;
+            }
+            
+            wrongList.style.display = 'block';
+            emptyDiv.style.display = 'none';
+            
+            // 获取当前筛选
+            const activeFilter = document.querySelector('.filter-btn.active');
+            const filter = activeFilter ? activeFilter.textContent : '全部';
+            
+            let filtered = state.wrongQuestions;
+            if (filter === '待复习') {
+                filtered = state.wrongQuestions.filter(w => (w.wrongCount || 1) < 3);
+            } else if (filter === '已掌握') {
+                filtered = state.wrongQuestions.filter(w => (w.wrongCount || 1) >= 3);
+            }
+            
+            wrongList.innerHTML = '';
+            filtered.forEach(q => {
+                const item = document.createElement('div');
+                item.className = 'wrongbook-item';
+                const isMastered = (q.wrongCount || 1) >= 3;
+                item.innerHTML = `
+                    <div class="wrongbook-item-header">
+                        <span class="wrongbook-item-tag">${q.knowledge}</span>
+                        <span class="wrongbook-item-count">${isMastered ? '✅ 已掌握' : `❌ 错 ${q.wrongCount || 1} 次`}</span>
+                    </div>
+                    <div class="wrongbook-item-text">${q.question}</div>
+                `;
+                item.onclick = () => {
+                    alert(`题目：${q.question}\n\n正确答案：${q.answer}\n\n解析：${q.analysis}\n\n真题来源：${q.year}年${q.district}`);
+                };
+                wrongList.appendChild(item);
+            });
+        }
+
+        function filterWrong(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderWrongBook();
+        }
+
+        function challengeWrong() {
+            if (state.wrongQuestions.length === 0) {
+                alert('暂无错题，先去闯关吧！');
+                return;
+            }
+            // 随机抽取错题进行挑战
+            const pending = state.wrongQuestions.filter(w => (w.wrongCount || 1) < 3);
+            if (pending.length === 0) {
+                alert('所有错题都已掌握，太棒了！');
+                return;
+            }
+            // 这里可以实现错题挑战模式
+            alert('错题挑战模式：将随机抽取10道错题进行挑战！\n（功能开发中，敬请期待）');
+        }
+
+        // ===== 初始化 =====
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMap();
+        });
+    </script>
+</body>
+</html>
