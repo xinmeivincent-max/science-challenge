@@ -3254,6 +3254,13 @@
             return {};
         }
 
+        // 初始化：页面加载时恢复状态
+        function initState() {
+            const levels = loadProgress();
+            // 恢复已完成的关卡状态到state
+            state.completedLevels = levels;
+        }
+
         // 保存进度到localStorage
         function saveProgress() {
             const levels = {};
@@ -3774,6 +3781,7 @@
 
         // ===== 初始化 =====
         document.addEventListener('DOMContentLoaded', () => {
+            initState();
             renderMap();
         });
     </script>
