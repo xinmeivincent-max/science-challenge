@@ -3258,24 +3258,26 @@
         function initState() {
             const levels = loadProgress();
             // 恢复已完成的关卡状态到state
-            state.completedLevels = levels;
+            state.completedLevels = levels || {};
+            console.log('进度已恢复:', state.completedLevels);
         }
 
         // 保存进度到localStorage
         function saveProgress() {
-            const levels = {};
-            document.querySelectorAll('.level-node').forEach(node => {
-                const id = parseInt(node.dataset.id);
-                levels[id] = {
-                    completed: node.classList.contains('completed'),
-                    stars: parseInt(node.dataset.stars) || 0
-                };
-            });
+            // 从 state.completedLevels 读取，不依赖 DOM
+            const levels = state.completedLevels || {};
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
                 levels,
                 wrongQuestions: state.wrongQuestions,
                 favorites: state.favorites
             }));
+        }
+        
+        // 标记关卡完成（立即保存）
+        function markLevelComplete(levelId, stars) {
+            if (!state.completedLevels) state.completedLevels = {};
+            state.completedLevels[levelId] = { completed: true, stars: stars };
+            saveProgress();
         }
 
         // ===== 页面切换 =====
@@ -3683,14 +3685,8 @@
                 wrongList.style.display = 'none';
             }
             
-            // 保存关卡进度
-            const levels = loadProgress();
-            levels[state.currentLevel] = { completed: true, stars };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                levels,
-                wrongQuestions: state.wrongQuestions,
-                favorites: state.favorites
-            }));
+            // 保存关卡进度（使用 markLevelComplete 统一保存）
+            markLevelComplete(state.currentLevel, stars);
             
             showPage('pageResult');
         }
